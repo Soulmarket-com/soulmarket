@@ -1,0 +1,125 @@
+---
+import Base from '../layouts/Base.astro';
+import CtaBanner from '../components/sections/CtaBanner.astro';
+import { useTranslations, routes } from '../i18n/utils';
+
+const lang = 'es';
+const t = useTranslations(lang);
+const r = routes[lang];
+
+const services = [
+  {
+    id: 'web',
+    icon: '⚡',
+    title: t('service.web.title'),
+    desc: t('service.web.desc'),
+    bullets: [
+      'Diseño a medida, no plantillas',
+      'Optimizado para Core Web Vitals',
+      'SEO técnico incluido',
+      'Responsive y accesible',
+      'Panel de gestión de contenido',
+      'Dominio y hosting a cargo del cliente',
+    ],
+    price: 'Desde 800 €',
+  },
+  {
+    id: 'design',
+    icon: '✦',
+    title: t('service.design.title'),
+    desc: t('service.design.desc'),
+    bullets: [
+      'Logotipo y sistema de identidad visual',
+      'Paleta de colores y tipografías',
+      'Manual de marca',
+      'Materiales digitales (redes, plantillas)',
+      'Formatos editables incluidos',
+    ],
+    price: 'Desde 400 €',
+  },
+  {
+    id: 'media',
+    icon: '◉',
+    title: t('service.media.title'),
+    desc: t('service.media.desc'),
+    bullets: [
+      'Fotografía de producto o corporativa',
+      'Video para redes sociales o web',
+      'Edición y retoque profesional',
+      'Entrega en múltiples formatos',
+      'Sesión en estudio o a domicilio',
+    ],
+    price: 'Desde 200 €',
+  },
+  {
+    id: 'marketing',
+    icon: '◈',
+    title: t('service.marketing.title'),
+    desc: t('service.marketing.desc'),
+    bullets: [
+      'Auditoría SEO y plan de acción',
+      'Estrategia de contenidos',
+      'Gestión de redes sociales',
+      'Campañas Google Ads / Meta Ads',
+      'Analítica web (Google Analytics 4)',
+      'Informe mensual de resultados',
+    ],
+    price: 'Desde 350 €/mes',
+  },
+];
+---
+
+<Base
+  title="Servicios de diseño web, fotografía y marketing"
+  description="Diseño y desarrollo web, diseño gráfico, fotografía, video y marketing digital. Presupuesto personalizado sin compromiso."
+  lang="es"
+>
+  <!-- Page header -->
+  <header class="bg-ink text-white pt-28 pb-16">
+    <div class="container-lg">
+      <span class="text-accent-light text-xs font-semibold uppercase tracking-widest">{t('services.eyebrow')}</span>
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold mt-3 tracking-tight">{t('services.title')}</h1>
+      <p class="mt-5 text-white/55 text-lg max-w-2xl">
+        Soluciones digitales completas para autónomos y empresas que quieren crecer online.
+      </p>
+    </div>
+  </header>
+
+  <!-- Services detail -->
+  <section class="section-gap">
+    <div class="container-lg space-y-24">
+      {services.map((s, i) => (
+        <div id={s.id} class:list={['grid grid-cols-1 md:grid-cols-2 gap-12 items-center', i % 2 !== 0 && 'md:[&>:first-child]:order-2']}>
+          <!-- Text -->
+          <div>
+            <div class="text-3xl mb-5 w-12 h-12 flex items-center justify-center bg-surface rounded-xl">{s.icon}</div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-ink mb-4">{s.title}</h2>
+            <p class="text-muted text-base leading-relaxed mb-6">{s.desc}</p>
+            <ul class="space-y-2.5 mb-8">
+              {s.bullets.map(bullet => (
+                <li class="flex items-start gap-3 text-sm text-ink">
+                  <svg class="w-4 h-4 text-accent mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                  </svg>
+                  {bullet}
+                </li>
+              ))}
+            </ul>
+            <div class="flex items-center gap-4">
+              <span class="text-2xl font-extrabold text-ink">{s.price}</span>
+              <a href={r.contact} class="bg-accent hover:bg-accent-dark text-white font-semibold px-5 py-2.5 rounded-lg text-sm transition-colors">
+                {t('nav.cta')}
+              </a>
+            </div>
+          </div>
+          <!-- Placeholder visual -->
+          <div class="aspect-square bg-surface rounded-2xl flex items-center justify-center text-6xl">
+            {s.icon}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <CtaBanner lang={lang} />
+</Base>

@@ -1,0 +1,104 @@
+---
+import { useTranslations, routes } from '../../i18n/utils';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const r = routes[lang];
+
+const services = [
+  {
+    id: 'web',
+    icon: '⚡',
+    title: t('service.web.title'),
+    desc: t('service.web.desc'),
+    featured: true,
+  },
+  {
+    id: 'design',
+    icon: '✦',
+    title: t('service.design.title'),
+    desc: t('service.design.desc'),
+    featured: false,
+  },
+  {
+    id: 'media',
+    icon: '◉',
+    title: t('service.media.title'),
+    desc: t('service.media.desc'),
+    featured: false,
+  },
+  {
+    id: 'marketing',
+    icon: '◈',
+    title: t('service.marketing.title'),
+    desc: t('service.marketing.desc'),
+    featured: false,
+  },
+];
+---
+
+<section class="section-gap bg-surface">
+  <div class="container-lg">
+    <div class="text-center mb-16">
+      <span class="text-accent text-xs font-semibold uppercase tracking-widest">{t('services.eyebrow')}</span>
+      <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-ink mt-3 tracking-tight">
+        {t('services.title')}
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      {services.map((s) => (
+        <a
+          href={`${r.services}#${s.id}`}
+          class:list={[
+            'group p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg',
+            s.featured
+              ? 'bg-ink text-white border-transparent'
+              : 'bg-white border-border hover:border-accent/20',
+          ]}
+        >
+          <div class:list={[
+            'text-2xl mb-6 w-11 h-11 flex items-center justify-center rounded-xl',
+            s.featured ? 'bg-white/10' : 'bg-surface',
+          ]}>
+            {s.icon}
+          </div>
+          <h3 class:list={[
+            'text-xl font-bold mb-3',
+            s.featured ? 'text-white' : 'text-ink',
+          ]}>
+            {s.title}
+          </h3>
+          <p class:list={[
+            'text-sm leading-relaxed',
+            s.featured ? 'text-white/55' : 'text-muted',
+          ]}>
+            {s.desc}
+          </p>
+          <div class:list={[
+            'mt-6 inline-flex items-center gap-1.5 text-sm font-semibold group-hover:gap-2.5 transition-all',
+            s.featured ? 'text-accent-light' : 'text-accent',
+          ]}>
+            {t('learnMore')}
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <div class="text-center mt-12">
+      <a
+        href={r.services}
+        class="inline-flex items-center gap-2 border border-ink/20 text-ink font-semibold px-6 py-3 rounded-xl hover:bg-ink hover:text-white hover:border-ink transition-all"
+      >
+        {t('services.cta')}
+      </a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,41 @@
+---
+import { useTranslations, routes } from '../../i18n/utils';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const r = routes[lang];
+---
+
+<section class="section-gap bg-surface">
+  <div class="container-lg">
+    <div class="bg-ink rounded-3xl px-8 py-16 md:p-20 text-center relative overflow-hidden">
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-accent/10 rounded-full blur-3xl pointer-events-none" />
+      <div class="relative">
+        <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-5 max-w-2xl mx-auto">
+          {t('cta.title')}
+        </h2>
+        <p class="text-white/55 text-lg mb-10 max-w-xl mx-auto">
+          {t('cta.subtitle')}
+        </p>
+        <div class="flex flex-wrap gap-4 justify-center">
+          <a
+            href={r.contact}
+            class="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-semibold px-8 py-4 rounded-xl transition-colors"
+          >
+            {t('cta.primary')}
+          </a>
+          <a
+            href={r.portfolio}
+            class="inline-flex items-center gap-2 bg-white/8 hover:bg-white/15 text-white font-semibold px-8 py-4 rounded-xl transition-colors border border-white/10"
+          >
+            {t('cta.secondary')}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

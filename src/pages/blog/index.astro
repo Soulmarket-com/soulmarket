@@ -1,0 +1,75 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { useTranslations, routes } from '../../i18n/utils';
+
+const lang = 'es';
+const t = useTranslations(lang);
+const r = routes[lang];
+
+const allPosts = await getCollection('blog', ({ data }) => data.lang === lang && !data.draft);
+const posts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+function formatDate(date: Date) {
+  return new Intl.DateTimeFormat('es-ES', { year: 'numeric', month: 'long', day: 'numeric' }).format(date);
+}
+---
+
+<Base
+  title="Blog de diseño web y marketing digital"
+  description="Artículos, guías y recursos sobre diseño web, SEO, fotografía y marketing digital para autónomos y pequeñas empresas."
+  lang="es"
+>
+  <header class="bg-ink text-white pt-28 pb-16">
+    <div class="container-lg">
+      <span class="text-accent-light text-xs font-semibold uppercase tracking-widest">{t('blog.eyebrow')}</span>
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold mt-3 tracking-tight">{t('blog.title')}</h1>
+    </div>
+  </header>
+
+  <section class="section-gap">
+    <div class="container-lg">
+      {posts.length === 0 ? (
+        <p class="text-center text-muted py-20">{t('blog.empty')}</p>
+      ) : (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {posts.map((post) => (
+            <a href={`/blog/${post.id}`} class="group block rounded-2xl overflow-hidden border border-border hover:shadow-lg hover:border-transparent transition-all duration-300">
+              {post.data.image && (
+                <div class="aspect-video overflow-hidden">
+                  <img
+                    src={post.data.image}
+                    alt={post.data.imageAlt || post.data.title}
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                </div>
+              )}
+              <div class="p-6">
+                {post.data.tags.length > 0 && (
+                  <div class="flex flex-wrap gap-1.5 mb-3">
+                    {post.data.tags.slice(0, 2).map(tag => (
+                      <span class="text-xs text-accent bg-accent/8 px-2.5 py-0.5 rounded-full font-medium">{tag}</span>
+                    ))}
+                  </div>
+                )}
+                <h2 class="font-bold text-ink text-lg leading-snug mb-2 group-hover:text-accent transition-colors">
+                  {post.data.title}
+                </h2>
+                <p class="text-sm text-muted leading-relaxed line-clamp-2 mb-4">{post.data.description}</p>
+                <div class="flex items-center justify-between">
+                  <time class="text-xs text-muted" datetime={post.data.pubDate.toISOString()}>
+                    {formatDate(post.data.pubDate)}
+                  </time>
+                  <span class="text-xs font-semibold text-accent group-hover:translate-x-0.5 transition-transform inline-block">
+                    {t('blog.readMore')} →
+                  </span>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+</Base>

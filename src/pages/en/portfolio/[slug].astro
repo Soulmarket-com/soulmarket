@@ -1,0 +1,56 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import CtaBanner from '../../../components/sections/CtaBanner.astro';
+import { useTranslations, routes } from '../../../i18n/utils';
+
+export async function getStaticPaths() {
+  const items = await getCollection('portfolio', ({ data }) => data.lang === 'en');
+  return items.map(item => ({
+    params: { slug: item.id },
+    props: { item },
+  }));
+}
+
+const { item } = Astro.props;
+const { Content } = await render(item);
+const lang = 'en';
+const t = useTranslations(lang);
+const r = routes[lang];
+
+const categoryLabels: Record<string, string> = {
+  web: t('portfolio.filter.web'),
+  design: t('portfolio.filter.design'),
+  'photo-video': t('portfolio.filter.media'),
+  marketing: t('portfolio.filter.marketing'),
+};
+---
+
+<Base title={item.data.title} description={item.data.description} image={item.data.image} lang="en">
+  <header class="bg-ink text-white pt-28 pb-16">
+    <div class="container-lg">
+      <a href={r.portfolio} class="inline-flex items-center gap-1.5 text-white/40 hover:text-white text-sm mb-8 transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        {t('nav.portfolio')}
+      </a>
+      <span class="text-xs font-medium text-accent-light bg-white/10 px-3 py-1 rounded-full">
+        {categoryLabels[item.data.category]}
+      </span>
+      <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight mt-4 mb-4">{item.data.title}</h1>
+      <p class="text-white/55 text-lg max-w-2xl">{item.data.description}</p>
+    </div>
+  </header>
+
+  <div class="container-lg -mt-8 mb-16">
+    <img src={item.data.image} alt={item.data.imageAlt || item.data.title}
+      class="w-full aspect-video object-cover rounded-2xl shadow-xl" />
+  </div>
+
+  <section class="container-sm pb-16 prose-content">
+    <Content />
+  </section>
+
+  <CtaBanner lang={lang} />
+</Base>

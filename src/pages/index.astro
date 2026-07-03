@@ -1,0 +1,35 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/sections/Hero.astro';
+import Services from '../components/sections/Services.astro';
+import FeaturedPortfolio from '../components/sections/FeaturedPortfolio.astro';
+import LatestBlog from '../components/sections/LatestBlog.astro';
+import CtaBanner from '../components/sections/CtaBanner.astro';
+import { getCollection } from 'astro:content';
+
+const lang = 'es';
+
+const portfolioItems = await getCollection('portfolio', ({ data }) =>
+  data.lang === lang && data.featured
+);
+
+const posts = await getCollection('blog', ({ data }) =>
+  data.lang === lang && !data.draft
+);
+
+const latestPosts = posts
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+---
+
+<Base
+  title="Diseño Web, Fotografía y Marketing Digital"
+  description="Soulmarket — Diseño web, fotografía, video y marketing digital para marcas que quieren destacar. Presupuesto sin compromiso."
+  lang="es"
+>
+  <Hero lang={lang} />
+  <Services lang={lang} />
+  <FeaturedPortfolio lang={lang} items={portfolioItems} />
+  <LatestBlog lang={lang} posts={latestPosts} />
+  <CtaBanner lang={lang} />
+</Base>

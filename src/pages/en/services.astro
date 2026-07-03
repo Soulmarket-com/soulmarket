@@ -1,0 +1,120 @@
+---
+import Base from '../../layouts/Base.astro';
+import CtaBanner from '../../components/sections/CtaBanner.astro';
+import { useTranslations, routes } from '../../i18n/utils';
+
+const lang = 'en';
+const t = useTranslations(lang);
+const r = routes[lang];
+
+const services = [
+  {
+    id: 'web',
+    icon: '⚡',
+    title: t('service.web.title'),
+    desc: t('service.web.desc'),
+    bullets: [
+      'Custom design, no templates',
+      'Core Web Vitals optimized',
+      'Technical SEO included',
+      'Responsive and accessible',
+      'Content management panel',
+    ],
+    price: 'From €800',
+  },
+  {
+    id: 'design',
+    icon: '✦',
+    title: t('service.design.title'),
+    desc: t('service.design.desc'),
+    bullets: [
+      'Logo and visual identity system',
+      'Color palette and typography',
+      'Brand guidelines',
+      'Digital materials (social media, templates)',
+      'Editable files included',
+    ],
+    price: 'From €400',
+  },
+  {
+    id: 'media',
+    icon: '◉',
+    title: t('service.media.title'),
+    desc: t('service.media.desc'),
+    bullets: [
+      'Product or corporate photography',
+      'Video for social media or web',
+      'Professional editing and retouching',
+      'Delivery in multiple formats',
+      'Studio or on-location shoots',
+    ],
+    price: 'From €200',
+  },
+  {
+    id: 'marketing',
+    icon: '◈',
+    title: t('service.marketing.title'),
+    desc: t('service.marketing.desc'),
+    bullets: [
+      'SEO audit and action plan',
+      'Content strategy',
+      'Social media management',
+      'Google Ads / Meta Ads campaigns',
+      'Web analytics (Google Analytics 4)',
+      'Monthly results report',
+    ],
+    price: 'From €350/month',
+  },
+];
+---
+
+<Base
+  title="Web design, photography and marketing services"
+  description="Web design and development, graphic design, photography, video and digital marketing. Personalized quote with no commitment."
+  lang="en"
+>
+  <header class="bg-ink text-white pt-28 pb-16">
+    <div class="container-lg">
+      <span class="text-accent-light text-xs font-semibold uppercase tracking-widest">{t('services.eyebrow')}</span>
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold mt-3 tracking-tight">{t('services.title')}</h1>
+      <p class="mt-5 text-white/55 text-lg max-w-2xl">
+        Complete digital solutions for freelancers and businesses looking to grow online.
+      </p>
+    </div>
+  </header>
+
+  <section class="section-gap">
+    <div class="container-lg space-y-24">
+      {services.map((s, i) => (
+        <div id={s.id} class:list={['grid grid-cols-1 md:grid-cols-2 gap-12 items-center', i % 2 !== 0 && 'md:[&>:first-child]:order-2']}>
+          <div>
+            <div class="text-3xl mb-5 w-12 h-12 flex items-center justify-center bg-surface rounded-xl">{s.icon}</div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-ink mb-4">{s.title}</h2>
+            <p class="text-muted text-base leading-relaxed mb-6">{s.desc}</p>
+            <ul class="space-y-2.5 mb-8">
+              {s.bullets.map(bullet => (
+                <li class="flex items-start gap-3 text-sm text-ink">
+                  <svg class="w-4 h-4 text-accent mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                  </svg>
+                  {bullet}
+                </li>
+              ))}
+            </ul>
+            <div class="flex items-center gap-4">
+              <span class="text-2xl font-extrabold text-ink">{s.price}</span>
+              <a href={r.contact} class="bg-accent hover:bg-accent-dark text-white font-semibold px-5 py-2.5 rounded-lg text-sm transition-colors">
+                {t('nav.cta')}
+              </a>
+            </div>
+          </div>
+          <div class="aspect-square bg-surface rounded-2xl flex items-center justify-center text-6xl">
+            {s.icon}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <CtaBanner lang={lang} />
+</Base>

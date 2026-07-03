@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+import { getLangFromUrl, useTranslations, routes } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const r = routes[lang];
+---
+
+<Base title={t('404.title')} description={t('404.subtitle')} lang={lang}>
+  <section class="min-h-screen bg-ink flex items-center">
+    <div class="container-lg text-center text-white">
+      <p class="text-8xl font-extrabold text-accent mb-6">404</p>
+      <h1 class="text-3xl sm:text-4xl font-extrabold mb-4">{t('404.title')}</h1>
+      <p class="text-white/55 text-lg mb-10">{t('404.subtitle')}</p>
+      <a
+        href={r.home}
+        class="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-semibold px-6 py-3.5 rounded-xl transition-colors"
+      >
+        {t('404.cta')}
+      </a>
+    </div>
+  </section>
+</Base>
