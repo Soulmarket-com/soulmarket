@@ -1,0 +1,39 @@
+---
+import { useTranslations, routes } from '../../i18n/utils';
+import AnimatedButton from '../ui/AnimatedButton.astro';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const r = routes[lang];
+
+const stats = [
+  { value: t('facts.stat1.value'), label: t('facts.stat1.label') },
+  { value: t('facts.stat2.value'), label: t('facts.stat2.label') },
+  { value: t('facts.stat3.value'), label: t('facts.stat3.label') },
+  { value: t('facts.stat4.value'), label: t('facts.stat4.label') },
+];
+---
+
+<section class="section-gap bg-ink light-content relative overflow-hidden">
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[40rem] h-[40rem] bg-primary-2/10 rounded-full blur-3xl pointer-events-none" />
+  <div class="container-lg relative grid lg:grid-cols-[1fr_1.2fr] gap-12 items-center">
+    <div class="reveal fadeInUp text-center lg:text-left">
+      <h2 class="section-title-small text-white mb-4">{t('facts.title')}</h2>
+      <p class="section-descr mb-8">{t('facts.subtitle')}</p>
+      <AnimatedButton href={r.contact} variant="grad">{t('facts.cta')}</AnimatedButton>
+    </div>
+
+    <div class="grid grid-cols-2 gap-8">
+      {stats.map((s, i) => (
+        <div class="reveal fadeInUp text-center lg:text-left" style={`--reveal-delay:${i * 0.1}s`}>
+          <p class="text-4xl md:text-5xl font-display text-gradient-primary" data-counter>{s.value}</p>
+          <p class="text-sm text-white/60 uppercase tracking-widest mt-2">{s.label}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

@@ -8,34 +8,75 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const r = routes[lang];
+
+const repeats = [0, 1, 2, 3];
 ---
 
-<section class="section-gap bg-surface">
-  <div class="container-lg">
-    <div class="bg-ink rounded-3xl px-8 py-16 md:p-20 text-center relative overflow-hidden">
-      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-accent/10 rounded-full blur-3xl pointer-events-none" />
-      <div class="relative">
-        <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-5 max-w-2xl mx-auto">
-          {t('cta.title')}
-        </h2>
-        <p class="text-white/55 text-lg mb-10 max-w-xl mx-auto">
-          {t('cta.subtitle')}
-        </p>
-        <div class="flex flex-wrap gap-4 justify-center">
-          <a
-            href={r.contact}
-            class="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-semibold px-8 py-4 rounded-xl transition-colors"
-          >
-            {t('cta.primary')}
-          </a>
-          <a
-            href={r.portfolio}
-            class="inline-flex items-center gap-2 bg-white/8 hover:bg-white/15 text-white font-semibold px-8 py-4 rounded-xl transition-colors border border-white/10"
-          >
-            {t('cta.secondary')}
-          </a>
-        </div>
-      </div>
+<!-- CTA final estilo eszterbial: marquee gigante de "contacto ♥", todo el bloque es un enlace -->
+<section class="border-t border-border">
+  <p class="reveal fadeInUp text-center pt-14 text-xs font-semibold uppercase tracking-[0.22em] text-muted">
+    {t('cta.note')}
+  </p>
+  <a href={r.contact} class="contact-marquee group block overflow-hidden py-10 md:py-14" aria-label={t('cta.primary')}>
+    <div class="contact-marquee-track" aria-hidden="true">
+      {[0, 1].map(() => (
+        <span class="contact-marquee-seq">
+          {repeats.map(() => (
+            <>
+              <span class="contact-marquee-item">{t('cta.marquee')}</span>
+              <svg class="contact-marquee-heart" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+                <path
+                  d="M50 32 C 44 16, 22 12, 14 26 C 6 40, 16 56, 30 68 C 38 75, 46 82, 50 88 C 54 81, 63 74, 71 66 C 84 54, 94 39, 85 26 C 76 13, 55 17, 50 32 Z"
+                  stroke="var(--color-accent)"
+                  stroke-width="5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </>
+          ))}
+        </span>
+      ))}
     </div>
-  </div>
+  </a>
 </section>
+
+<style>
+  .contact-marquee-track {
+    display: flex;
+    width: max-content;
+    animation: contact-marquee-scroll 26s linear infinite;
+  }
+  .contact-marquee:hover .contact-marquee-track,
+  .contact-marquee:focus-visible .contact-marquee-track {
+    animation-play-state: paused;
+  }
+  .contact-marquee-seq {
+    display: inline-flex;
+    align-items: center;
+  }
+  .contact-marquee-item {
+    font-family: var(--font-family-display);
+    font-style: italic;
+    font-weight: 480;
+    font-size: clamp(3.5rem, 2rem + 8vw, 8rem);
+    line-height: 1.1;
+    color: var(--color-ink);
+    transition: color 0.3s var(--ease-default);
+  }
+  .contact-marquee:hover .contact-marquee-item,
+  .contact-marquee:focus-visible .contact-marquee-item {
+    color: var(--color-accent);
+  }
+  .contact-marquee-heart {
+    width: clamp(2rem, 1rem + 4vw, 4rem);
+    height: auto;
+    margin-inline: clamp(1.25rem, 3vw, 2.5rem);
+  }
+  @keyframes contact-marquee-scroll {
+    to { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .contact-marquee-track { animation: none; }
+  }
+</style>

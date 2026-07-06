@@ -1,0 +1,48 @@
+---
+import { useTranslations, routes } from '../../i18n/utils';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const r = routes[lang];
+---
+
+<section class="section-gap-lg" id="story">
+  <div class="container-md text-center">
+    <p class="reveal fadeInUp text-xs font-semibold uppercase tracking-[0.22em] text-accent mb-8">
+      {t('story.eyebrow')}
+    </p>
+
+    <p class="reveal fadeInUp story-big text-ink" style="--reveal-delay:0.1s">
+      {`${t('story.big.1')} ${t('story.big.2')} `}<em class="story-big-em">{t('story.big.3')}</em>
+    </p>
+
+    <a href={r.about} class="reveal fadeInUp btn-animate-y inline-block mt-10 text-sm font-semibold text-ink underline underline-offset-4" style="--reveal-delay:0.25s">
+      <span class="btn-animate-y-1">{t('story.cta')} →</span>
+      <span class="btn-animate-y-2" aria-hidden="true">{t('story.cta')} →</span>
+    </a>
+  </div>
+</section>
+
+<style>
+  /* Declaración en mayúsculas, sans grueso: contrapunto al serif del resto */
+  .story-big {
+    font-size: clamp(1.5rem, 1rem + 2.6vw, 2.75rem);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+  .story-big-em {
+    font-family: var(--font-family-display);
+    font-style: italic;
+    font-weight: 460;
+    text-transform: lowercase;
+    letter-spacing: 0;
+    color: var(--color-accent);
+  }
+</style>

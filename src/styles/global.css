@@ -1,21 +1,100 @@
 @import "tailwindcss";
 
+/*
+ * Design tokens ported from the Resonance template (skin: "main").
+ * Kept alongside the original Soulmarket brand tokens (accent/ink/paper/...)
+ * so existing components keep working untouched while new sections can
+ * opt into the fuller Resonance palette/scale as they get rebuilt.
+ */
 @theme {
-  --color-accent: #7c3aed;
-  --color-accent-light: #a78bfa;
-  --color-accent-dark: #5b21b6;
-  --color-ink: #0f0f0f;
-  --color-paper: #ffffff;
-  --color-muted: #6b7280;
-  --color-surface: #f4f4f5;
-  --color-border: #e4e4e7;
+  /* Editorial cálida: crema de papel, tinta cálida, coral como único acento vivo */
+  --color-accent: #e8542f;
+  --color-accent-light: #f08a6c;
+  --color-accent-dark: #c43d1d;
+  --color-ink: #1a1714;
+  --color-paper: #faf6ef;
+  --color-muted: #6e6659;
+  --color-surface: #f2ebde;
+  --color-border: #e6dccb;
 
-  --font-family-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-family-sans: 'Instrument Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-family-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+
+  /* Gama cálida coral→ámbar (sustituye al gradiente violeta de Resonance) */
+  --color-primary-1: #e89a3c;
+  --color-primary-1-a: #d98a2c;
+  --color-primary-light-1: #f9e9cf;
+  --color-primary-2: #e8542f;
+  --color-primary-light-2: #fbe0d6;
+  --color-primary-3: #d6491f;
+  --color-primary-light-3: #f8d9cd;
+  --color-primary-4: #b13a10;
+  --color-primary-light-4: #f3cfc0;
+  --color-secondary-1: #f3e3b8;
+
+  /* Neutral scale, independent from the accent/ink brand tokens above */
+  --color-dark-1: #171310;
+  --color-dark-2: #211c17;
+  --color-dark-3: #2e2823;
+  --color-dark-4: #56504a;
+  --color-gray-1: #6e6659;
+  --color-gray-2: #837b6e;
+  --color-gray-3: #948c7f;
+  --color-gray-light-1: #f0e9dc;
+  --color-gray-light-2: #f6f1e7;
+  --color-gray-light-3: #e8e0d1;
+  --color-gray-light-4: #dcd2bf;
+  --color-gray-light-5: #d0c5b0;
+  --color-gray-light-6: #c2b7a2;
+
+  --radius-default: 6px;
+  --radius-large: 30px;
+
+  --shadow-default: 0px 5px 10px 0px rgba(31, 24, 16, 0.05), 0px 1px 1px 0px rgba(31, 24, 16, 0.03), 0px 3px 5px 0px rgba(31, 24, 16, 0.03);
+  --shadow-strong: 0px 5px 10px 0px rgba(31, 24, 16, 0.08), 0px 1px 1px 0px rgba(31, 24, 16, 0.06), 0px 3px 5px 0px rgba(31, 24, 16, 0.06);
+  --shadow-block: 0px 3px 50px 0px rgba(31, 24, 16, 0.05);
+  --shadow-block-strong: 0px 3px 50px 0px rgba(31, 24, 16, 0.15);
+
+  --ease-default: cubic-bezier(0, 0, 0.58, 1);
+  --ease-out-long: cubic-bezier(0, 0.5, 0, 1);
+  --ease-out-medium: cubic-bezier(0, 0.57, 0.55, 1);
+  --ease-out-short: cubic-bezier(0.15, 0.7, 0.78, 1);
+  --ease-elastic-1: cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  --ease-elastic-2: cubic-bezier(0.68, -3, 0.27, 5);
+}
+
+:root {
+  --gradient-primary: linear-gradient(
+    90deg,
+    var(--color-primary-4) 0%,
+    var(--color-primary-3) 33%,
+    var(--color-primary-2) 67%,
+    var(--color-primary-1) 100%
+  );
+  --gradient-primary-diagonal: linear-gradient(
+    45deg,
+    var(--color-primary-4) 0%,
+    var(--color-primary-3) 33%,
+    var(--color-primary-2) 67%,
+    var(--color-primary-1) 100%
+  );
+  --transition-default: color 0.27s var(--ease-default), background-color 0.27s var(--ease-default),
+    border-color 0.27s var(--ease-default), box-shadow 0.27s var(--ease-default),
+    transform 0.27s var(--ease-default), opacity 0.27s var(--ease-default);
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
+  }
+
+  /* Anchored targets clear the 64px fixed header */
+  [id] {
+    scroll-margin-top: 5.5rem;
+  }
+
+  a, button, input, select, textarea {
+    touch-action: manipulation;
   }
 
   body {
@@ -39,6 +118,22 @@
   * {
     box-sizing: border-box;
   }
+
+  /* Editorial type scale — only applies to bare h1-h6, any
+     Tailwind text-* utility on the element still wins. */
+  h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 1em;
+    font-family: var(--font-family-display);
+    font-weight: 500;
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+  h1 { margin-bottom: 0.5em; font-size: 42px; letter-spacing: -0.015em; }
+  h2 { margin-bottom: 0.5em; font-size: 36px; letter-spacing: -0.01em; }
+  h3 { margin-bottom: 0.7em; font-size: 28px; letter-spacing: -0.01em; }
+  h4 { font-size: 24px; }
+  h5 { font-size: 20px; }
+  h6 { font-size: 16px; font-weight: 700; }
 }
 
 @layer utilities {
@@ -68,11 +163,662 @@
     padding-block: 7rem;
   }
 
+  .font-display {
+    font-family: var(--font-family-display);
+  }
+
   .text-gradient {
     background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-light) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+  }
+
+  /* Resonance "main" 4-stop brand gradient (blue -> violet -> magenta -> pink) */
+  .text-gradient-primary {
+    background-image: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .bg-gradient-primary {
+    background-image: var(--gradient-primary);
+  }
+
+  /* ==============================
+     Section typography scale (Resonance "main")
+     ============================== */
+
+  .section-caption {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6em;
+    margin-bottom: 25px;
+    color: var(--color-accent);
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+  .section-caption::before {
+    content: "";
+    display: inline-block;
+    width: 1.75em;
+    height: 1px;
+    background: currentColor;
+  }
+  .light-content .section-caption {
+    color: var(--color-accent-light);
+  }
+
+  /* Fluid clamp()s so these can be dropped straight onto headings without
+     needing separate Tailwind responsive size utilities stacked on top. */
+  .section-title {
+    font-family: var(--font-family-display);
+    font-size: clamp(2rem, 1.1rem + 4vw, 3.5rem);
+    font-weight: 500;
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+  }
+
+  .section-title-small {
+    font-family: var(--font-family-display);
+    font-size: clamp(1.75rem, 1.2rem + 2.5vw, 2.5rem);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  .section-title-medium {
+    font-family: var(--font-family-display);
+    font-size: clamp(2.25rem, 1rem + 6vw, 5.125rem);
+    font-weight: 480;
+    line-height: 1.08;
+    letter-spacing: -0.015em;
+  }
+
+  .section-title-large {
+    font-family: var(--font-family-display);
+    font-size: clamp(2.5rem, 1rem + 6.5vw, 5.625rem);
+    font-weight: 480;
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+  }
+
+  /* Titular a dos alturas (itálica serif + caja alta gruesa), gesto eszterbial
+     compartido por Portfolio, Servicios y Blog */
+  .giant-heading {
+    font-family: var(--font-family-display);
+  }
+  .giant-heading em {
+    display: block;
+    font-style: italic;
+    font-weight: 460;
+    font-size: clamp(2.25rem, 1.25rem + 4.5vw, 4.25rem);
+    line-height: 1;
+    letter-spacing: -0.01em;
+    text-transform: lowercase;
+  }
+  .giant-heading > span {
+    display: block;
+    font-optical-sizing: auto;
+    font-weight: 850;
+    font-size: clamp(2.75rem, 1.25rem + 7vw, 6.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+
+  /* Palabra destacada en itálica serif, gesto editorial de la marca */
+  .accent-italic {
+    font-family: var(--font-family-display);
+    font-style: italic;
+    font-weight: 480;
+    color: var(--color-accent);
+  }
+
+  .section-descr {
+    color: var(--color-gray-1);
+    font-size: clamp(1.125rem, 1rem + 0.6vw, 1.4375rem);
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.005em;
+  }
+
+  /* Light-on-dark section contexts (mirrors Resonance's .light-content) */
+  .light-content .section-descr {
+    color: rgba(250, 246, 239, 0.72);
+  }
+
+  /* ==============================
+     Buttons (Resonance "main" .btn-mod)
+     ============================== */
+
+  .btn-mod {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    box-sizing: border-box;
+    padding: 13px 24px 12px;
+    color: var(--color-paper);
+    background: var(--color-ink);
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 0.085em;
+    box-shadow: none;
+    cursor: pointer;
+    transition: var(--transition-default);
+  }
+  .btn-mod:hover, .btn-mod:focus-visible {
+    color: #fff;
+    text-decoration: none;
+  }
+  .btn-mod:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .btn-mod.btn-small { padding: 7px 17px; font-size: 12px; letter-spacing: 0.06em; }
+  .btn-mod.btn-large { padding: 16px 34px 15px; font-size: 13px; letter-spacing: 0.085em; }
+
+  .btn-mod.btn-primary { background: var(--color-accent); color: #fff; }
+  .btn-mod.btn-primary:hover { background: var(--color-accent-dark); }
+
+  /* "grad" se conserva como nombre histórico: hoy es el CTA coral principal */
+  .btn-mod.btn-grad {
+    background: var(--color-accent);
+    color: #fff;
+    border: none;
+  }
+  .btn-mod.btn-grad:hover { background: var(--color-accent-dark); }
+
+  .btn-mod.btn-white { color: var(--color-ink); background: var(--color-paper); }
+  .btn-mod.btn-white:hover { background: #fff; }
+
+  .btn-mod.btn-border {
+    color: var(--color-dark-1);
+    background: transparent;
+    border-color: var(--color-dark-1);
+  }
+  .btn-mod.btn-border:hover { background: var(--color-dark-1); color: #fff; }
+
+  .btn-mod.btn-border-w {
+    color: #fff;
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.98);
+  }
+  .btn-mod.btn-border-w:hover { background: #fff; color: var(--color-dark-1); }
+
+  /* Text slide-up hover effect, used inside .btn-mod or a:not(.no-hover) */
+  .btn-animate-y {
+    position: relative;
+    display: block;
+    overflow: hidden;
+  }
+  .btn-animate-y-1 {
+    display: block;
+    transition: transform 0.37s var(--ease-out-short), opacity 0.37s linear;
+  }
+  .btn-animate-y-2 {
+    display: block;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    opacity: 0;
+    transform: translateY(100%);
+    transition: transform 0.37s var(--ease-out-short), opacity 0.37s linear;
+  }
+  .btn-mod:hover .btn-animate-y-1,
+  a:not(.no-hover):hover .btn-animate-y-1 {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  .btn-mod:hover .btn-animate-y-2,
+  a:not(.no-hover):hover .btn-animate-y-2 {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .btn-animate-y-1, .btn-animate-y-2 {
+      transition: opacity 0.2s linear;
+      transform: none;
+    }
+  }
+
+  /* Skip link: visually hidden until keyboard focus */
+  .skip-link {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 100;
+    padding: 0.6rem 1rem;
+    background: var(--color-ink);
+    color: #fff;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transform: translateY(calc(-100% - 1.5rem));
+    transition: transform 0.15s var(--ease-default);
+  }
+  .skip-link:focus-visible {
+    transform: translateY(0);
+  }
+
+  /* ==============================
+     Scroll-reveal effects (WOW.js equivalent, IntersectionObserver-driven)
+     Usage: <div class="reveal fadeInUp"> ... add data-reveal-delay="0.2s" to stagger
+     ============================== */
+
+  .reveal {
+    opacity: 0;
+  }
+  .reveal.is-visible {
+    opacity: 1;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+
+  .reveal.fadeIn { transition: opacity 0.9s var(--ease-default); transition-delay: var(--reveal-delay, 0s); }
+
+  .reveal.fadeInUp { transform: translateY(40px); transition: opacity 0.65s var(--ease-out-short), transform 0.65s var(--ease-out-short); transition-delay: var(--reveal-delay, 0s); }
+  .reveal.fadeInUp.is-visible { transform: translateY(0); }
+
+  .reveal.fadeInDown { transform: translateY(-40px); transition: opacity 0.65s var(--ease-out-short), transform 0.65s var(--ease-out-short); transition-delay: var(--reveal-delay, 0s); }
+  .reveal.fadeInDown.is-visible { transform: translateY(0); }
+
+  .reveal.fadeInLeft { transform: translateX(-40px); transition: opacity 0.65s var(--ease-out-short), transform 0.65s var(--ease-out-short); transition-delay: var(--reveal-delay, 0s); }
+  .reveal.fadeInLeft.is-visible { transform: translateX(0); }
+
+  .reveal.fadeInRight { transform: translateX(40px); transition: opacity 0.65s var(--ease-out-short), transform 0.65s var(--ease-out-short); transition-delay: var(--reveal-delay, 0s); }
+  .reveal.fadeInRight.is-visible { transform: translateX(0); }
+
+  /* ==============================
+     Animaciones GSAP (scroll-animations.ts) — todo scopeado a .has-anim,
+     que solo se añade con JS activo y sin prefers-reduced-motion.
+     ============================== */
+
+  .split-w {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    /* aire para los descendentes de Fraunces (p, g, y) dentro de la máscara */
+    padding-bottom: 0.14em;
+    margin-bottom: -0.14em;
+  }
+  .has-anim .split-i {
+    display: inline-block;
+    transform: translateY(110%);
+  }
+
+  .has-anim .mark-decoration::before {
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 1s var(--ease-out-long) 0.15s;
+  }
+  .has-anim .mark-decoration.is-drawn::before {
+    transform: scaleX(1);
+  }
+
+  /* ==============================
+     Hero editorial (titular gigante estilo cartel)
+     ============================== */
+
+  /* Retícula de columnas visible, el "esqueleto" del diseño como estética */
+  .hero-columns::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+    background-size: calc(100% / 8) 100%;
+    opacity: 0.55;
+    pointer-events: none;
+    mask-image: linear-gradient(to bottom, black 60%, transparent);
+  }
+
+  .hero-giant {
+    font-family: var(--font-family-display);
+    font-optical-sizing: auto;
+    font-weight: 850;
+    font-size: clamp(3.25rem, 13vw, 12.5rem);
+    line-height: 0.92;
+    letter-spacing: -0.025em;
+    word-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  /* Palabra intercalada en itálica, minúscula y coral: el gesto de la marca a escala cartel */
+  .hero-giant-em {
+    font-style: italic;
+    font-weight: 460;
+    font-size: 0.58em;
+    text-transform: lowercase;
+    letter-spacing: -0.02em;
+    color: var(--color-accent);
+    margin-left: 0.08em;
+  }
+
+  .hero-giant-line2 {
+    margin-left: clamp(1.5rem, 11vw, 12rem);
+  }
+
+  /* ==============================
+     Header expansivo (retícula → bordes del viewport al hacer scroll)
+     ============================== */
+
+  .site-header {
+    --header-inset: max(1.5rem, calc((100vw - 1280px) / 2 + 1.5rem));
+    background-color: transparent;
+  }
+  .site-header .site-header-nav {
+    padding-inline: var(--header-inset);
+    height: 5rem;
+  }
+  /* Línea inferior: nace con el ancho del contenido y se extiende a todo el viewport */
+  .site-header::after {
+    content: "";
+    position: absolute;
+    left: var(--header-inset);
+    right: var(--header-inset);
+    bottom: 0;
+    height: 1px;
+    background: var(--color-border);
+  }
+  .site-header.is-scrolled,
+  .site-header.menu-open {
+    background-color: color-mix(in srgb, var(--color-paper) 92%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .site-header.is-scrolled .site-header-nav {
+    padding-inline: 1.5rem;
+    height: 4rem;
+  }
+  .site-header.is-scrolled::after {
+    left: 0;
+    right: 0;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .site-header {
+      transition: background-color 0.4s var(--ease-default);
+    }
+    .site-header .site-header-nav {
+      transition: padding 0.7s var(--ease-out-long), height 0.5s var(--ease-out-medium);
+    }
+    .site-header::after {
+      transition: left 0.7s var(--ease-out-long), right 0.7s var(--ease-out-long);
+    }
+  }
+
+  /* Colores de la barra: tinta sobre papel; papel sobre tinta con el menú abierto */
+  .site-header .site-logo { color: var(--color-ink); }
+  .site-header .site-logo:hover { color: var(--color-accent); }
+  .site-header .site-tagline { color: var(--color-muted); }
+  .site-header .site-lang { color: var(--color-muted); }
+  .site-header .site-lang:hover { color: var(--color-ink); }
+  .site-header .menu-toggle { color: var(--color-ink); }
+
+  .site-header.menu-open {
+    background-color: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .site-header.menu-open::after { opacity: 0; }
+  .site-header.menu-open .site-logo,
+  .site-header.menu-open .site-lang,
+  .site-header.menu-open .menu-toggle { color: var(--color-paper); }
+  .site-header.menu-open .site-logo:hover { color: var(--color-accent-light); }
+  .site-header.menu-open .site-tagline { color: rgba(250, 246, 239, 0.45); }
+
+  /* ==============================
+     Menú a pantalla completa (referencia epic.net)
+     ============================== */
+
+  html.menu-locked { overflow: hidden; }
+
+  /* Hamburguesa de dos barras, siempre visible, que muta en X */
+  .menu-toggle {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: var(--transition-default);
+  }
+  .menu-toggle:hover { background: color-mix(in srgb, currentColor 8%, transparent); }
+  .menu-toggle-bar {
+    display: block;
+    width: 24px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform 0.35s var(--ease-out-short);
+  }
+  .site-header.menu-open .menu-toggle-bar:first-child { transform: translateY(4.5px) rotate(45deg); }
+  .site-header.menu-open .menu-toggle-bar:last-child { transform: translateY(-4.5px) rotate(-45deg); }
+
+  /* Cortina oscura que cae desde arriba */
+  .menu-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    background: var(--color-dark-1);
+    visibility: hidden;
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+    transition:
+      clip-path 0.65s var(--ease-out-long),
+      opacity 0.4s var(--ease-default),
+      visibility 0s linear 0.65s;
+  }
+  .menu-overlay.is-open {
+    visibility: visible;
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+    transition:
+      clip-path 0.65s var(--ease-out-long),
+      opacity 0.3s var(--ease-default);
+  }
+  /* La retícula de columnas del hero continúa dentro del menú */
+  .menu-overlay::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: linear-gradient(90deg, rgba(250, 246, 239, 0.06) 1px, transparent 1px);
+    background-size: calc(100% / 8) 100%;
+    pointer-events: none;
+  }
+
+  /* Entrada escalonada de cada bloque del menú */
+  .menu-item {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.45s var(--ease-out-short), transform 0.45s var(--ease-out-short);
+  }
+  .menu-overlay.is-open .menu-item {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: calc(0.22s + var(--menu-i, 0) * 0.06s);
+  }
+
+  .menu-link {
+    display: inline-block;
+    font-family: var(--font-family-display);
+    font-size: clamp(2.25rem, 1.4rem + 3.6vw, 3.75rem);
+    font-weight: 500;
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+    color: var(--color-paper);
+    transition: color 0.25s var(--ease-default);
+  }
+  .menu-link:hover,
+  .menu-link:focus-visible,
+  .menu-link.is-active {
+    color: var(--color-accent-light);
+    font-style: italic;
+  }
+  .menu-index {
+    font-family: var(--font-family-sans);
+    font-style: normal;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: rgba(250, 246, 239, 0.4);
+    margin-right: 0.9em;
+    vertical-align: 1.6em;
+  }
+
+  .menu-divider {
+    width: 1px;
+    background: rgba(250, 246, 239, 0.14);
+  }
+
+  /* Mega-CTA "empieza un nuevo proyecto" */
+  .menu-start-small {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(250, 246, 239, 0.55);
+    transition: color 0.25s var(--ease-default);
+  }
+  .menu-start-big {
+    display: block;
+    margin: 0.3em 0;
+    font-family: var(--font-family-display);
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-size: clamp(3rem, 1.8rem + 5.5vw, 6rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--color-paper);
+    transition: transform 0.4s var(--ease-out-short);
+  }
+  .menu-start-big em {
+    display: block;
+    font-style: italic;
+    font-weight: 460;
+    font-size: 0.62em;
+    text-transform: lowercase;
+    letter-spacing: -0.01em;
+    color: var(--color-accent-light);
+  }
+  .menu-start:hover .menu-start-big,
+  .menu-start:focus-visible .menu-start-big { transform: scale(1.03); }
+  .menu-start:hover .menu-start-small,
+  .menu-start:focus-visible .menu-start-small { color: var(--color-accent-light); }
+
+  .menu-footer { border-top: 1px solid rgba(250, 246, 239, 0.14); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .menu-overlay,
+    .menu-overlay.is-open {
+      clip-path: none;
+      transition: opacity 0.25s linear, visibility 0s linear 0.25s;
+    }
+    .menu-overlay.is-open { transition: opacity 0.25s linear; }
+    .menu-item,
+    .menu-overlay.is-open .menu-item {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+    .menu-overlay:not(.is-open) .menu-item { opacity: 0; }
+    .menu-toggle-bar { transition: none; }
+  }
+
+  /* ==============================
+     Parallax de cursor + píldora (Servicios, Equipo)
+     Las formas .par siguen la trayectoria del cursor a distintas
+     profundidades; la .hover-pill lo persigue (gesto eszterbial).
+     Vars --px/--py/--mx/--my las pone scripts/pointer-parallax.ts.
+     ============================== */
+
+  .parallax-art .par {
+    transition: transform 0.5s var(--ease-out-short);
+    will-change: transform;
+  }
+  .parallax-art .p1 { transform: translate(calc(var(--px, 0) * 10px), calc(var(--py, 0) * 8px)); }
+  .parallax-art .p2 { transform: translate(calc(var(--px, 0) * 22px), calc(var(--py, 0) * 16px)); }
+  .parallax-art .p3 { transform: translate(calc(var(--px, 0) * -16px), calc(var(--py, 0) * -12px)); }
+
+  .hover-pill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0.45rem 0.9rem;
+    border-radius: 999px;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+    box-shadow: var(--shadow-strong);
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(calc(var(--mx, 0) * 1px), calc(var(--my, 0) * 1px)) translate(-50%, -140%) scale(0.8);
+    transition: transform 0.3s var(--ease-out-short), opacity 0.2s var(--ease-default);
+  }
+  @media (hover: hover) {
+    .parallax-card:hover .hover-pill {
+      opacity: 1;
+      transform: translate(calc(var(--mx, 0) * 1px), calc(var(--my, 0) * 1px)) translate(-50%, -140%) scale(1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .parallax-art .par { transition: none; transform: none; }
+    .hover-pill { transition: opacity 0.2s linear; }
+  }
+
+  /* Sello circular giratorio del Hero */
+  .stamp-spin {
+    animation: stamp-rotate 22s linear infinite;
+  }
+  @keyframes stamp-rotate {
+    to { transform: rotate(360deg); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .stamp-spin { animation: none; }
+  }
+
+  /* Underline mark decoration, mirrors Resonance's .mark-decoration-4 */
+  .mark-decoration {
+    position: relative;
+    display: inline-block;
+  }
+  .mark-decoration::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0.12em;
+    display: block;
+    width: 100%;
+    height: 7px;
+    z-index: -1;
+    opacity: 0.3;
+    background: var(--gradient-primary);
+    pointer-events: none;
   }
 
   .prose-content h2 { font-size: 1.5rem; font-weight: 700; margin-top: 2rem; margin-bottom: 0.75rem; }

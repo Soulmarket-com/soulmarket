@@ -1,0 +1,82 @@
+---
+// Vanilla-JS typed-word rotation, standing in for Resonance's TypeWriter.jsx
+// (which depends on react-type-animation).
+interface Props {
+  words: string[];
+  class?: string;
+}
+
+const { words, class: className = '' } = Astro.props;
+---
+
+<span class:list={['relative inline-block accent-italic', className]} data-typewriter-words={JSON.stringify(words)}>
+  <span aria-hidden="true" class="tw-text"></span>
+  <span class="sr-only">{words.join(', ')}</span>
+  <span class="tw-cursor" aria-hidden="true"></span>
+</span>
+
+<script>
+  function initTypewriters() {
+    document.querySelectorAll<HTMLElement>('[data-typewriter-words]').forEach((el) => {
+      if (el.dataset.twInit) return;
+      el.dataset.twInit = '1';
+
+      const words: string[] = JSON.parse(el.getAttribute('data-typewriter-words') || '[]');
+      const textEl = el.querySelector<HTMLElement>('.tw-text');
+      if (!words.length || !textEl) return;
+
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        textEl.textContent = words[0];
+        return;
+      }
+
+      let wordIndex = 0;
+      let charIndex = 0;
+      let deleting = false;
+
+      function tick() {
+        const current = words[wordIndex];
+        if (!deleting) {
+          charIndex++;
+          textEl!.textContent = current.slice(0, charIndex);
+          if (charIndex === current.length) {
+            deleting = true;
+            setTimeout(tick, 1400);
+            return;
+          }
+        } else {
+          charIndex--;
+          textEl!.textContent = current.slice(0, charIndex);
+          if (charIndex === 0) {
+            deleting = false;
+            wordIndex = (wordIndex + 1) % words.length;
+          }
+        }
+        setTimeout(tick, deleting ? 45 : 90);
+      }
+
+      tick();
+    });
+  }
+
+  initTypewriters();
+  document.addEventListener('astro:page-load', initTypewriters);
+</script>
+
+<style>
+  .tw-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 0.9em;
+    margin-left: 2px;
+    background: var(--color-primary-2);
+    vertical-align: -0.1em;
+    animation: tw-blink 1s step-end infinite;
+  }
+  @keyframes tw-blink {
+    50% { opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tw-cursor { animation: none; }
+  }
+</style>

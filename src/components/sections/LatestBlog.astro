@@ -18,66 +18,65 @@ function formatDate(date: Date) {
 }
 ---
 
-<section class="section-gap bg-ink text-white">
+<section class="section-gap-lg">
   <div class="container-lg">
-    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-14">
-      <div>
-        <span class="text-accent-light text-xs font-semibold uppercase tracking-widest">{t('blog.eyebrow')}</span>
-        <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold mt-3 tracking-tight">
-          {t('blog.title')}
-        </h2>
-      </div>
-      <a href={r.blog} class="text-sm font-semibold text-white/40 hover:text-white transition-colors whitespace-nowrap">
-        {t('blog.cta')} →
+    <div class="flex items-end justify-between gap-6 mb-12 md:mb-16">
+      <h2 class="reveal fadeInUp giant-heading text-ink mb-0">
+        <em class="block">{t('blog.giant.italic')}</em>
+        <span class="block">{t('blog.giant.main')}</span>
+      </h2>
+      <a href={r.blog} class="reveal fadeInUp btn-animate-y hidden sm:block text-sm font-semibold text-ink underline underline-offset-4 whitespace-nowrap mb-2" style="--reveal-delay:0.2s">
+        <span class="btn-animate-y-1">{t('blog.cta')} →</span>
+        <span class="btn-animate-y-2" aria-hidden="true">{t('blog.cta')} →</span>
       </a>
     </div>
 
     {posts.length === 0 ? (
-      <p class="text-center text-white/40 py-16">{t('blog.empty')}</p>
+      <p class="text-center text-muted py-16">{t('blog.empty')}</p>
     ) : (
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <ol class="border-t border-border">
         {posts.map((post, i) => (
-          <a
-            href={`${r.blog}/${post.id}`}
-            class:list={[
-              'group block rounded-2xl p-6 border transition-all duration-300 hover:border-white/20',
-              i === 0
-                ? 'md:row-span-1 bg-white/5 border-white/10'
-                : 'bg-white/3 border-white/8',
-            ]}
-          >
-            {post.data.image && (
-              <div class="aspect-video overflow-hidden rounded-xl mb-5">
-                <img
-                  src={post.data.image}
-                  alt={post.data.imageAlt || post.data.title}
-                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  loading="lazy"
-                />
-              </div>
-            )}
-            {post.data.tags.length > 0 && (
-              <div class="flex flex-wrap gap-1.5 mb-3">
-                {post.data.tags.slice(0, 2).map(tag => (
-                  <span class="text-xs text-white/40 bg-white/8 px-2.5 py-0.5 rounded-full">{tag}</span>
-                ))}
-              </div>
-            )}
-            <h3 class="font-bold text-white text-base leading-snug mb-2 group-hover:text-accent-light transition-colors">
-              {post.data.title}
-            </h3>
-            <p class="text-sm text-white/45 leading-relaxed line-clamp-2 mb-4">{post.data.description}</p>
-            <div class="flex items-center justify-between">
-              <time class="text-xs text-white/30" datetime={post.data.pubDate.toISOString()}>
+          <li class="border-b border-border">
+            <a
+              href={`${r.blog}/${post.id}`}
+              class="blog-row reveal fadeInUp group grid md:grid-cols-[9.5rem_1fr_auto] items-baseline gap-x-8 gap-y-1 py-7 md:py-8"
+              style={`--reveal-delay:${i * 0.08}s`}
+            >
+              <time class="text-xs font-semibold uppercase tracking-[0.16em] text-muted" datetime={post.data.pubDate.toISOString()}>
                 {formatDate(post.data.pubDate)}
               </time>
-              <span class="text-xs font-semibold text-accent-light group-hover:translate-x-0.5 transition-transform inline-block">
-                {t('blog.readMore')} →
-              </span>
-            </div>
-          </a>
+              <div>
+                <h3 class="blog-row-title text-ink mb-0">{post.data.title}</h3>
+                <p class="font-display italic text-muted mt-1.5 line-clamp-1 hidden md:block">{post.data.description}</p>
+              </div>
+              <span class="hidden md:inline text-2xl text-accent transition-transform duration-300 group-hover:translate-x-2 self-center" aria-hidden="true">→</span>
+            </a>
+          </li>
         ))}
-      </div>
+      </ol>
     )}
+
+    <div class="reveal fadeInUp sm:hidden text-center mt-10">
+      <a href={r.blog} class="btn-animate-y inline-block text-sm font-semibold text-ink underline underline-offset-4">
+        <span class="btn-animate-y-1">{t('blog.cta')} →</span>
+        <span class="btn-animate-y-2" aria-hidden="true">{t('blog.cta')} →</span>
+      </a>
+    </div>
   </div>
 </section>
+
+<style>
+  .blog-row-title {
+    font-family: var(--font-family-display);
+    font-weight: 600;
+    font-size: clamp(1.35rem, 1.1rem + 1.2vw, 2rem);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    transition: color 0.25s var(--ease-default);
+  }
+  .blog-row:hover .blog-row-title,
+  .blog-row:focus-visible .blog-row-title {
+    font-style: italic;
+    color: var(--color-accent);
+  }
+</style>

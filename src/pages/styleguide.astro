@@ -1,0 +1,192 @@
+---
+import Base from '../layouts/Base.astro';
+import AnimatedButton from '../components/ui/AnimatedButton.astro';
+
+const primaryScale = [
+  { name: 'primary-1', var: '--color-primary-1' },
+  { name: 'primary-2', var: '--color-primary-2' },
+  { name: 'primary-3', var: '--color-primary-3' },
+  { name: 'primary-4', var: '--color-primary-4' },
+];
+
+const darkScale = [
+  { name: 'dark-1', var: '--color-dark-1' },
+  { name: 'dark-2', var: '--color-dark-2' },
+  { name: 'dark-3', var: '--color-dark-3' },
+  { name: 'dark-4', var: '--color-dark-4' },
+];
+
+const grayScale = [
+  { name: 'gray-1', var: '--color-gray-1' },
+  { name: 'gray-2', var: '--color-gray-2' },
+  { name: 'gray-3', var: '--color-gray-3' },
+  { name: 'gray-light-1', var: '--color-gray-light-1' },
+  { name: 'gray-light-2', var: '--color-gray-light-2' },
+  { name: 'gray-light-3', var: '--color-gray-light-3' },
+  { name: 'gray-light-4', var: '--color-gray-light-4' },
+  { name: 'gray-light-5', var: '--color-gray-light-5' },
+  { name: 'gray-light-6', var: '--color-gray-light-6' },
+];
+
+const brandScale = [
+  { name: 'accent', var: '--color-accent' },
+  { name: 'accent-light', var: '--color-accent-light' },
+  { name: 'accent-dark', var: '--color-accent-dark' },
+  { name: 'ink', var: '--color-ink' },
+  { name: 'paper', var: '--color-paper' },
+  { name: 'muted', var: '--color-muted' },
+  { name: 'surface', var: '--color-surface' },
+  { name: 'border', var: '--color-border' },
+];
+---
+
+<Base
+  title="Guía de estilos"
+  description="Sistema de diseño interno de Soulmarket, portado desde la plantilla Resonance (skin main)."
+  noindex
+>
+  <div class="container-lg py-16 space-y-24">
+    <header class="max-w-2xl">
+      <p class="section-caption">Design system</p>
+      <h1 class="section-title-small">Guía de estilos</h1>
+      <p class="section-descr mt-4">
+        Fundamentos portados desde la plantilla <strong>Resonance</strong> (skin <code>main</code>):
+        color, tipografía, botones y efectos de scroll. Página de referencia interna, no indexada.
+      </p>
+    </header>
+
+    <!-- Colors -->
+    <section>
+      <h2 class="section-title-small mb-8">Color</h2>
+
+      <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-1 mb-3">Brand (Soulmarket)</h3>
+      <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4 mb-10">
+        {brandScale.map((c) => (
+          <div class="reveal fadeInUp">
+            <div class="h-20 rounded-default border border-border" style={`background:var(${c.var})`} />
+            <p class="mt-2 text-xs font-mono">{c.name}</p>
+          </div>
+        ))}
+      </div>
+
+      <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-1 mb-3">Primary gradient scale</h3>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
+        {primaryScale.map((c) => (
+          <div class="reveal fadeInUp">
+            <div class="h-20 rounded-default" style={`background:var(${c.var})`} />
+            <p class="mt-2 text-xs font-mono">{c.name}</p>
+          </div>
+        ))}
+      </div>
+      <div class="h-16 rounded-default bg-gradient-primary mb-10"></div>
+
+      <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-1 mb-3">Dark scale</h3>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
+        {darkScale.map((c) => (
+          <div class="reveal fadeInUp">
+            <div class="h-20 rounded-default" style={`background:var(${c.var})`} />
+            <p class="mt-2 text-xs font-mono">{c.name}</p>
+          </div>
+        ))}
+      </div>
+
+      <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-1 mb-3">Gray scale</h3>
+      <div class="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-9 gap-4">
+        {grayScale.map((c) => (
+          <div class="reveal fadeInUp">
+            <div class="h-20 rounded-default border border-border" style={`background:var(${c.var})`} />
+            <p class="mt-2 text-xs font-mono">{c.name}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Typography -->
+    <section>
+      <h2 class="section-title-small mb-8">Tipografía</h2>
+      <p class="text-sm text-gray-1 mb-8">
+        Fuentes: <strong>Fraunces</strong> (títulos, serif variable) + <strong>Instrument Sans</strong> (texto). Google Fonts.
+      </p>
+
+      <div class="space-y-6 mb-12">
+        <p class="section-title-large">Section title large</p>
+        <p class="section-title-medium">Section title medium</p>
+        <p class="section-title">Section title</p>
+        <p class="section-title-small">Section title small</p>
+        <p class="section-caption">Section caption</p>
+        <p class="section-descr">Section descr — texto de apoyo bajo un título de sección, pensado para subtítulos y leads.</p>
+      </div>
+
+      <div class="space-y-2">
+        <h1>Heading 1 — 42px</h1>
+        <h2>Heading 2 — 36px</h2>
+        <h3>Heading 3 — 28px</h3>
+        <h4>Heading 4 — 24px</h4>
+        <h5>Heading 5 — 20px</h5>
+        <h6>Heading 6 — 16px</h6>
+      </div>
+    </section>
+
+    <!-- Effects -->
+    <section>
+      <h2 class="section-title-small mb-8">Efectos</h2>
+
+      <div class="grid sm:grid-cols-2 gap-8">
+        <div>
+          <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-1 mb-4">Texto en gradiente</h3>
+          <p class="text-4xl font-bold text-gradient-primary">Soulmarket</p>
+        </div>
+
+        <div>
+          <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-1 mb-4">Subrayado decorativo</h3>
+          <p class="text-2xl"><span class="mark-decoration">Diseño con intención</span></p>
+        </div>
+      </div>
+
+      <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-1 mt-10 mb-4">Scroll reveal</h3>
+      <p class="text-sm text-gray-1 mb-6">Baja por la página para ver estos bloques aparecer (IntersectionObserver + CSS).</p>
+      <div class="grid sm:grid-cols-4 gap-4">
+        <div class="reveal fadeInUp bg-surface rounded-default p-6 text-center text-sm font-mono">fadeInUp</div>
+        <div class="reveal fadeInDown bg-surface rounded-default p-6 text-center text-sm font-mono" style="--reveal-delay:0.1s">fadeInDown</div>
+        <div class="reveal fadeInLeft bg-surface rounded-default p-6 text-center text-sm font-mono" style="--reveal-delay:0.2s">fadeInLeft</div>
+        <div class="reveal fadeInRight bg-surface rounded-default p-6 text-center text-sm font-mono" style="--reveal-delay:0.3s">fadeInRight</div>
+      </div>
+    </section>
+
+    <!-- Buttons -->
+    <section>
+      <h2 class="section-title-small mb-8">Botones</h2>
+
+      <div class="flex flex-wrap items-center gap-4 mb-8">
+        <AnimatedButton variant="primary">Primary</AnimatedButton>
+        <AnimatedButton variant="grad">Gradient</AnimatedButton>
+        <AnimatedButton variant="border">Border</AnimatedButton>
+        <div class="bg-ink p-4 rounded-default inline-flex gap-4">
+          <AnimatedButton variant="white">White</AnimatedButton>
+          <AnimatedButton variant="border-w">Border white</AnimatedButton>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-4">
+        <AnimatedButton variant="primary" size="small">Small</AnimatedButton>
+        <AnimatedButton variant="primary" size="medium">Medium</AnimatedButton>
+        <AnimatedButton variant="primary" size="large">Large</AnimatedButton>
+      </div>
+    </section>
+
+    <!-- Shadows & radius -->
+    <section>
+      <h2 class="section-title-small mb-8">Sombras y radios</h2>
+      <div class="grid sm:grid-cols-4 gap-8 mb-10">
+        <div class="bg-paper p-6 rounded-default shadow-default text-center text-sm font-mono">shadow-default</div>
+        <div class="bg-paper p-6 rounded-default shadow-strong text-center text-sm font-mono">shadow-strong</div>
+        <div class="bg-paper p-6 rounded-default shadow-block text-center text-sm font-mono">shadow-block</div>
+        <div class="bg-paper p-6 rounded-default shadow-block-strong text-center text-sm font-mono">shadow-block-strong</div>
+      </div>
+      <div class="grid sm:grid-cols-2 gap-8">
+        <div class="bg-surface p-6 rounded-default text-center text-sm font-mono">rounded-default (4px)</div>
+        <div class="bg-surface p-6 rounded-large text-center text-sm font-mono">rounded-large (30px)</div>
+      </div>
+    </section>
+  </div>
+</Base>

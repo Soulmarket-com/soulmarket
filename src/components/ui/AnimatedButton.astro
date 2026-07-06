@@ -1,0 +1,24 @@
+---
+// Button with the Resonance "main" text slide-up hover effect.
+// Renders as an <a> when `href` is passed, otherwise a <button>.
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'grad' | 'white' | 'border' | 'border-w';
+  size?: 'small' | 'medium' | 'large';
+  class?: string;
+}
+
+const { href, variant = 'primary', size = 'medium', class: className = '', ...rest } = Astro.props;
+
+const sizeClass = size === 'medium' ? '' : `btn-${size}`;
+const classes = ['btn-mod', `btn-${variant}`, sizeClass, className].filter(Boolean).join(' ');
+
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag class={classes} href={href} {...rest}>
+  <span class="btn-animate-y">
+    <span class="btn-animate-y-1"><slot /></span>
+    <span class="btn-animate-y-2" aria-hidden="true"><slot /></span>
+  </span>
+</Tag>

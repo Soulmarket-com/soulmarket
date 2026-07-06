@@ -1,0 +1,51 @@
+---
+import { useTranslations, routes } from '../../i18n/utils';
+import AnimatedButton from '../ui/AnimatedButton.astro';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const r = routes[lang];
+
+const steps = [
+  { title: t('howwework.step1.title'), text: t('howwework.step1.text') },
+  { title: t('howwework.step2.title'), text: t('howwework.step2.text') },
+  { title: t('howwework.step3.title'), text: t('howwework.step3.text') },
+  { title: t('howwework.step4.title'), text: t('howwework.step4.text') },
+];
+---
+
+<section class="section-gap bg-ink light-content">
+  <div class="container-lg grid lg:grid-cols-2 gap-14 items-center">
+    <!-- Placeholder image collage — swap for real work-in-progress photos -->
+    <div class="reveal fadeInLeft relative h-[360px] sm:h-[420px]">
+      <div class="absolute top-0 left-0 w-[55%] h-[60%] rounded-2xl bg-white/5 border border-white/10"></div>
+      <div class="absolute bottom-0 left-[15%] w-[60%] h-[55%] rounded-2xl bg-gradient-primary opacity-90"></div>
+      <div class="absolute top-[10%] right-0 w-[45%] h-[70%] rounded-2xl bg-white/8 border border-white/10"></div>
+    </div>
+
+    <div class="reveal fadeInUp">
+      <p class="section-caption">{t('howwework.eyebrow')}</p>
+      <h2 class="section-title-small text-white mb-10">{t('howwework.title')}</h2>
+
+      <ol class="space-y-6 mb-10">
+        {steps.map((s, i) => (
+          <li class="flex gap-4">
+            <span class="shrink-0 w-8 h-8 rounded-full border border-white/20 flex items-center justify-center text-sm font-semibold text-white/70">
+              {i + 1}
+            </span>
+            <div>
+              <p class="font-bold text-white">{s.title}</p>
+              <p class="text-sm text-white/55 leading-relaxed mt-1">{s.text}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+
+      <AnimatedButton href={r.contact} variant="grad">{t('howwework.cta')}</AnimatedButton>
+    </div>
+  </div>
+</section>

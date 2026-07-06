@@ -17,6 +17,7 @@ export default defineConfig({
           en: 'en-US',
         },
       },
+      filter: (page) => !page.includes('/styleguide'),
     }),
   ],
   i18n: {

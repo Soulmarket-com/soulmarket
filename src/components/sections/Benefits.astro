@@ -1,0 +1,38 @@
+---
+import { useTranslations } from '../../i18n/utils';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const benefits = [
+  { title: t('benefits.1.title'), text: t('benefits.1.text') },
+  { title: t('benefits.2.title'), text: t('benefits.2.text') },
+  { title: t('benefits.3.title'), text: t('benefits.3.text') },
+  { title: t('benefits.4.title'), text: t('benefits.4.text') },
+];
+---
+
+<section class="section-gap">
+  <div class="container-lg">
+    <div class="reveal fadeInUp text-center max-w-2xl mx-auto mb-16">
+      <p class="section-caption">{t('benefits.eyebrow')}</p>
+      <h2 class="section-title-small text-ink">{t('benefits.title')}</h2>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      {benefits.map((b, i) => (
+        <div class="reveal fadeInUp" style={`--reveal-delay:${i * 0.1}s`}>
+          <div class="w-11 h-11 rounded-xl bg-primary-light-2 text-primary-2 flex items-center justify-center font-bold mb-5">
+            {i + 1}
+          </div>
+          <h3 class="text-lg font-bold text-ink mb-2">{b.title}</h3>
+          <p class="text-sm text-muted leading-relaxed">{b.text}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

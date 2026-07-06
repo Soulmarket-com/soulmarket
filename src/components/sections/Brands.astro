@@ -1,0 +1,28 @@
+---
+// Placeholder logo strip — see brands.note. Replace with real client logos
+// before launch; do not ship generic blocks as if they were real clients.
+import { useTranslations } from '../../i18n/utils';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="py-16 border-y border-border">
+  <div class="container-lg">
+    <p class="reveal fadeIn text-center text-xs font-semibold uppercase tracking-widest text-gray-1 mb-1">
+      {t('brands.title')}
+    </p>
+    <p class="text-center text-xs text-gray-2 mb-10">{t('brands.note')}</p>
+    <div class="reveal fadeIn grid grid-cols-2 sm:grid-cols-5 gap-6">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <div class="h-14 rounded-lg bg-gray-light-1 flex items-center justify-center text-gray-2 text-xs font-semibold uppercase tracking-wide">
+          Logo {i + 1}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

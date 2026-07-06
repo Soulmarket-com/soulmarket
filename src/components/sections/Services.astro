@@ -9,96 +9,154 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 const r = routes[lang];
 
+// Cada servicio lleva una composición geométrica plana (estilo Laws of UX)
+// sobre un bloque de color de la paleta; las formas `.par` siguen al cursor.
 const services = [
-  {
-    id: 'web',
-    icon: '⚡',
-    title: t('service.web.title'),
-    desc: t('service.web.desc'),
-    featured: true,
-  },
-  {
-    id: 'design',
-    icon: '✦',
-    title: t('service.design.title'),
-    desc: t('service.design.desc'),
-    featured: false,
-  },
-  {
-    id: 'media',
-    icon: '◉',
-    title: t('service.media.title'),
-    desc: t('service.media.desc'),
-    featured: false,
-  },
-  {
-    id: 'marketing',
-    icon: '◈',
-    title: t('service.marketing.title'),
-    desc: t('service.marketing.desc'),
-    featured: false,
-  },
+  { id: 'web', art: 'web', bg: 'var(--color-dark-1)', title: t('service.web.title'), desc: t('service.web.desc') },
+  { id: 'uxui', art: 'uxui', bg: 'var(--color-secondary-1)', title: t('service.uxui.title'), desc: t('service.uxui.desc') },
+  { id: 'design', art: 'design', bg: 'var(--color-accent)', title: t('service.design.title'), desc: t('service.design.desc') },
+  { id: 'media', art: 'media', bg: 'var(--color-gray-light-3)', title: t('service.media.title'), desc: t('service.media.desc') },
+  { id: 'marketing', art: 'marketing', bg: 'var(--color-primary-1)', title: t('service.marketing.title'), desc: t('service.marketing.desc') },
 ];
 ---
 
-<section class="section-gap bg-surface">
+<section class="section-gap-lg" id="services">
   <div class="container-lg">
-    <div class="text-center mb-16">
-      <span class="text-accent text-xs font-semibold uppercase tracking-widest">{t('services.eyebrow')}</span>
-      <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-ink mt-3 tracking-tight">
-        {t('services.title')}
+    <div class="flex items-end justify-between gap-6 mb-14 md:mb-20">
+      <h2 class="reveal fadeInUp giant-heading text-ink mb-0">
+        <em class="block">{t('services.giant.italic')}</em>
+        <span class="block">{t('services.giant.main')}</span>
       </h2>
+      <a href={r.services} class="reveal fadeInUp btn-animate-y hidden sm:block text-sm font-semibold text-ink underline underline-offset-4 whitespace-nowrap mb-2" style="--reveal-delay:0.2s">
+        <span class="btn-animate-y-1">{t('services.cta')} →</span>
+        <span class="btn-animate-y-2" aria-hidden="true">{t('services.cta')} →</span>
+      </a>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-      {services.map((s) => (
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+      {services.map((s, i) => (
         <a
           href={`${r.services}#${s.id}`}
-          class:list={[
-            'group p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg',
-            s.featured
-              ? 'bg-ink text-white border-transparent'
-              : 'bg-white border-border hover:border-accent/20',
-          ]}
+          class="service-card parallax-card group block reveal fadeInUp"
+          style={`--reveal-delay:${(i % 3) * 0.1}s`}
         >
-          <div class:list={[
-            'text-2xl mb-6 w-11 h-11 flex items-center justify-center rounded-xl',
-            s.featured ? 'bg-white/10' : 'bg-surface',
-          ]}>
-            {s.icon}
+          <div class="parallax-art relative aspect-[4/3] rounded-xl overflow-hidden" style={`background:${s.bg}`}>
+            {s.art === 'web' && (
+              <svg class="absolute inset-0 w-full h-full" viewBox="0 0 400 300" fill="none" aria-hidden="true">
+                <g class="par p1">
+                  <rect x="64" y="58" width="272" height="188" rx="12" fill="var(--color-paper)" />
+                  <line x1="64" y1="94" x2="336" y2="94" stroke="var(--color-gray-light-4)" stroke-width="2" />
+                  <circle cx="86" cy="76" r="5" fill="var(--color-accent)" />
+                  <circle cx="104" cy="76" r="5" fill="var(--color-primary-1)" />
+                  <circle cx="122" cy="76" r="5" fill="var(--color-secondary-1)" />
+                </g>
+                <g class="par p2">
+                  <rect x="88" y="116" width="128" height="64" rx="6" fill="var(--color-accent)" />
+                  <rect x="88" y="196" width="224" height="14" rx="7" fill="var(--color-gray-light-3)" />
+                  <rect x="88" y="220" width="164" height="14" rx="7" fill="var(--color-gray-light-3)" />
+                </g>
+                <g class="par p3">
+                  <path d="M282 176 L282 218 L294 206 L304 226 L314 220 L304 201 L320 199 Z" fill="var(--color-ink)" stroke="var(--color-paper)" stroke-width="3" stroke-linejoin="round" />
+                </g>
+              </svg>
+            )}
+            {s.art === 'uxui' && (
+              <svg class="absolute inset-0 w-full h-full" viewBox="0 0 400 300" fill="none" aria-hidden="true">
+                <g class="par p1" stroke="var(--color-ink)" stroke-width="3">
+                  <circle cx="190" cy="150" r="86" />
+                  <circle cx="190" cy="150" r="58" />
+                  <circle cx="190" cy="150" r="30" />
+                </g>
+                <circle class="par p2" cx="190" cy="150" r="12" fill="var(--color-accent)" />
+                <g class="par p3">
+                  <path d="M258 182 L258 236 L273 221 L286 246 L299 239 L286 215 L306 212 Z" fill="var(--color-ink)" stroke="var(--color-secondary-1)" stroke-width="3" stroke-linejoin="round" />
+                </g>
+              </svg>
+            )}
+            {s.art === 'design' && (
+              <svg class="absolute inset-0 w-full h-full" viewBox="0 0 400 300" fill="none" aria-hidden="true">
+                <circle class="par p1" cx="150" cy="140" r="58" fill="var(--color-paper)" />
+                <rect class="par p2" x="196" y="112" width="92" height="92" fill="var(--color-ink)" transform="rotate(12 242 158)" />
+                <path class="par p3" d="M150 236 L196 160 L242 236 Z" fill="var(--color-secondary-1)" />
+              </svg>
+            )}
+            {s.art === 'media' && (
+              <svg class="absolute inset-0 w-full h-full" viewBox="0 0 400 300" fill="none" aria-hidden="true">
+                <g class="par p1">
+                  <circle cx="170" cy="156" r="72" fill="var(--color-ink)" />
+                  <circle cx="170" cy="156" r="30" fill="var(--color-paper)" />
+                  <circle cx="170" cy="156" r="12" fill="var(--color-ink)" />
+                  <circle cx="146" cy="128" r="9" fill="var(--color-paper)" />
+                </g>
+                <path class="par p2" d="M262 108 L262 168 L312 138 Z" fill="var(--color-accent)" />
+                <circle class="par p3" cx="286" cy="208" r="18" stroke="var(--color-ink)" stroke-width="3" />
+              </svg>
+            )}
+            {s.art === 'marketing' && (
+              <svg class="absolute inset-0 w-full h-full" viewBox="0 0 400 300" fill="none" aria-hidden="true">
+                <g class="par p1" fill="var(--color-paper)">
+                  <rect x="96" y="176" width="42" height="60" rx="4" />
+                  <rect x="158" y="146" width="42" height="90" rx="4" />
+                  <rect x="220" y="106" width="42" height="130" rx="4" />
+                </g>
+                <g class="par p2" stroke="var(--color-ink)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M96 150 C 150 130, 200 110, 288 68" />
+                  <path d="M262 64 L292 66 L286 94" fill="none" />
+                </g>
+                <circle class="par p3" cx="310" cy="196" r="10" fill="var(--color-accent)" />
+              </svg>
+            )}
+            <span class="hover-pill" aria-hidden="true">{t('learnMore')} →</span>
           </div>
-          <h3 class:list={[
-            'text-xl font-bold mb-3',
-            s.featured ? 'text-white' : 'text-ink',
-          ]}>
-            {s.title}
-          </h3>
-          <p class:list={[
-            'text-sm leading-relaxed',
-            s.featured ? 'text-white/55' : 'text-muted',
-          ]}>
-            {s.desc}
-          </p>
-          <div class:list={[
-            'mt-6 inline-flex items-center gap-1.5 text-sm font-semibold group-hover:gap-2.5 transition-all',
-            s.featured ? 'text-accent-light' : 'text-accent',
-          ]}>
-            {t('learnMore')}
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
+          <div class="pt-5">
+            <h3 class="service-title text-ink mb-0 group-hover:text-accent transition-colors">{s.title}</h3>
+            <p class="font-display italic text-muted mt-1.5">{s.desc}</p>
           </div>
         </a>
       ))}
+
+      <a href={r.contact} class="service-card parallax-card group block reveal fadeInUp" style={`--reveal-delay:${(services.length % 3) * 0.1}s`}>
+        <div class="parallax-art relative aspect-[4/3] rounded-xl overflow-hidden border-2 border-dashed border-border">
+          <svg class="absolute inset-0 w-full h-full" viewBox="0 0 400 300" fill="none" aria-hidden="true">
+            <g class="par p2" stroke="var(--color-accent)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M200 108 C 188 76, 144 68, 128 96 C 112 124, 132 156, 160 180 C 176 194, 192 208, 200 220 C 208 206, 226 192, 242 176 C 268 152, 288 122, 270 96 C 252 70, 210 78, 200 108 Z" />
+            </g>
+            <g class="par p1" stroke="var(--color-gray-light-4)" stroke-width="4" stroke-linecap="round">
+              <path d="M84 84 v28 M70 98 h28" />
+              <path d="M318 196 v24 M306 208 h24" />
+            </g>
+            <circle class="par p3" cx="316" cy="92" r="9" fill="var(--color-secondary-1)" />
+          </svg>
+          <span class="hover-pill" aria-hidden="true">{t('services.more.cta')} →</span>
+        </div>
+        <div class="pt-5">
+          <h3 class="service-title text-ink mb-0 group-hover:text-accent transition-colors">{t('services.more.title')}</h3>
+          <p class="font-display italic text-muted mt-1.5">{t('services.more.desc')}</p>
+        </div>
+      </a>
     </div>
 
-    <div class="text-center mt-12">
-      <a
-        href={r.services}
-        class="inline-flex items-center gap-2 border border-ink/20 text-ink font-semibold px-6 py-3 rounded-xl hover:bg-ink hover:text-white hover:border-ink transition-all"
-      >
-        {t('services.cta')}
+    <div class="reveal fadeInUp sm:hidden text-center mt-12">
+      <a href={r.services} class="btn-animate-y inline-block text-sm font-semibold text-ink underline underline-offset-4">
+        <span class="btn-animate-y-1">{t('services.cta')} →</span>
+        <span class="btn-animate-y-2" aria-hidden="true">{t('services.cta')} →</span>
       </a>
     </div>
   </div>
 </section>
+
+<style>
+  .service-title {
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-size: clamp(1.25rem, 1.05rem + 0.9vw, 1.65rem);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+  }
+</style>
+
+<script>
+  import { initPointerParallax } from '../../scripts/pointer-parallax';
+  initPointerParallax();
+</script>

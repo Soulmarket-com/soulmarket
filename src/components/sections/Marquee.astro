@@ -1,0 +1,85 @@
+---
+import { useTranslations } from '../../i18n/utils';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+// La clave es una lista separada por rayas; aquí se trocea para alternar estilos
+const items = t('marquee.text')
+  .split('—')
+  .map((s) => s.trim())
+  .filter(Boolean);
+---
+
+<!-- Cinta editorial: caja alta rellena / itálica en contorno alternadas, flores coral -->
+<div class="marquee py-10 md:py-14 overflow-hidden" aria-hidden="true">
+  <div class="marquee-track">
+    {[0, 1].map(() => (
+      <span class="marquee-seq">
+        {items.map((word, i) => (
+          <>
+            <span class:list={['marquee-word', i % 2 === 0 ? 'is-caps' : 'is-italic']}>{word}</span>
+            <svg class="marquee-flower" viewBox="0 0 100 100" aria-hidden="true">
+              <g fill="var(--color-accent)">
+                <ellipse cx="50" cy="22" rx="13" ry="20" />
+                <ellipse cx="50" cy="78" rx="13" ry="20" />
+                <ellipse cx="22" cy="50" rx="20" ry="13" />
+                <ellipse cx="78" cy="50" rx="20" ry="13" />
+              </g>
+              <circle cx="50" cy="50" r="11" fill="var(--color-ink)" />
+            </svg>
+          </>
+        ))}
+      </span>
+    ))}
+  </div>
+</div>
+
+<style>
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee-scroll 36s linear infinite;
+  }
+  .marquee-seq {
+    display: inline-flex;
+    align-items: center;
+  }
+  .marquee-word {
+    font-family: var(--font-family-display);
+    white-space: nowrap;
+    line-height: 1.1;
+  }
+  .marquee-word.is-caps {
+    font-optical-sizing: auto;
+    font-weight: 850;
+    font-size: clamp(2.25rem, 1.25rem + 4.5vw, 4.5rem);
+    letter-spacing: -0.015em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+  .marquee-word.is-italic {
+    font-style: italic;
+    font-weight: 480;
+    font-size: clamp(2.25rem, 1.25rem + 4.5vw, 4.5rem);
+    text-transform: lowercase;
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--color-ink);
+  }
+  .marquee-flower {
+    width: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    height: auto;
+    margin-inline: clamp(1.25rem, 1rem + 1.5vw, 2.25rem);
+    flex-shrink: 0;
+  }
+  @keyframes marquee-scroll {
+    to { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track { animation: none; }
+  }
+</style>

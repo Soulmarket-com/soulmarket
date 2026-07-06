@@ -1,0 +1,123 @@
+---
+// Los retratos geométricos son placeholder — sustituir por fotos reales del
+// equipo cuando estén disponibles (manteniendo el bloque .parallax-art).
+import { useTranslations, routes } from '../../i18n/utils';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const r = routes[lang];
+
+// Cada retrato es una cara abstracta con un guiño a su rol: código (JM),
+// comunicación (MT) y cámara (SG), en bloques de color de la paleta.
+const members = [
+  { name: 'José Miguel Díaz', role: t('team.1.role'), art: 'dev', bg: 'var(--color-dark-1)' },
+  { name: 'Marcela Talero', role: t('team.2.role'), art: 'marketing', bg: 'var(--color-accent)' },
+  { name: 'Sergio Guild', role: t('team.3.role'), art: 'video', bg: 'var(--color-secondary-1)' },
+];
+---
+
+<section class="section-gap-lg">
+  <div class="container-lg">
+    <div class="flex items-end justify-between gap-10 mb-14 md:mb-20">
+      <h2 class="reveal fadeInUp giant-heading text-ink mb-0">
+        <em class="block">{t('team.giant.italic')}</em>
+        <span class="block">{t('team.giant.main')}</span>
+      </h2>
+      <p class="reveal fadeInUp hidden md:block max-w-sm text-muted leading-relaxed mb-2" style="--reveal-delay:0.2s">
+        {t('team.text')}
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-3 gap-x-8 gap-y-12">
+      {members.map((m, i) => (
+        <a
+          href={r.about}
+          class="team-card parallax-card group block reveal fadeInUp"
+          style={`--reveal-delay:${i * 0.1}s`}
+        >
+          <div class="parallax-art relative aspect-[4/5] rounded-xl overflow-hidden" style={`background:${m.bg}`}>
+            {m.art === 'dev' && (
+              <svg class="absolute inset-0 w-full h-full" viewBox="0 0 400 500" fill="none" aria-hidden="true">
+                <circle class="par p1" cx="200" cy="220" r="115" fill="var(--color-paper)" />
+                <g class="par p2">
+                  <rect x="126" y="192" width="64" height="48" rx="10" stroke="var(--color-ink)" stroke-width="7" />
+                  <rect x="210" y="192" width="64" height="48" rx="10" stroke="var(--color-ink)" stroke-width="7" />
+                  <line x1="190" y1="210" x2="210" y2="210" stroke="var(--color-ink)" stroke-width="7" />
+                  <circle cx="158" cy="216" r="8" fill="var(--color-ink)" />
+                  <circle cx="242" cy="216" r="8" fill="var(--color-ink)" />
+                  <path d="M172 284 q28 22 56 0" stroke="var(--color-ink)" stroke-width="7" stroke-linecap="round" />
+                </g>
+                <g class="par p3" stroke="var(--color-accent)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M96 388 L66 418 L96 448" />
+                  <path d="M304 388 L334 418 L304 448" />
+                </g>
+              </svg>
+            )}
+            {m.art === 'marketing' && (
+              <svg class="absolute inset-0 w-full h-full" viewBox="0 0 400 500" fill="none" aria-hidden="true">
+                <circle class="par p1" cx="200" cy="245" r="115" fill="var(--color-paper)" />
+                <g class="par p2">
+                  <circle cx="162" cy="228" r="9" fill="var(--color-ink)" />
+                  <circle cx="238" cy="228" r="9" fill="var(--color-ink)" />
+                  <path d="M158 282 q42 36 84 0" stroke="var(--color-ink)" stroke-width="7" stroke-linecap="round" />
+                  <circle cx="136" cy="266" r="13" fill="var(--color-secondary-1)" />
+                  <circle cx="264" cy="266" r="13" fill="var(--color-secondary-1)" />
+                </g>
+                <g class="par p3">
+                  <rect x="248" y="72" width="110" height="68" rx="20" fill="var(--color-secondary-1)" />
+                  <path d="M272 138 L262 164 L296 140 Z" fill="var(--color-secondary-1)" />
+                  <circle cx="283" cy="106" r="6" fill="var(--color-ink)" />
+                  <circle cx="303" cy="106" r="6" fill="var(--color-ink)" />
+                  <circle cx="323" cy="106" r="6" fill="var(--color-ink)" />
+                </g>
+              </svg>
+            )}
+            {m.art === 'video' && (
+              <svg class="absolute inset-0 w-full h-full" viewBox="0 0 400 500" fill="none" aria-hidden="true">
+                <circle class="par p1" cx="200" cy="235" r="115" fill="var(--color-ink)" />
+                <g class="par p2">
+                  <circle cx="158" cy="218" r="10" fill="var(--color-paper)" />
+                  <circle cx="244" cy="218" r="36" fill="var(--color-paper)" />
+                  <circle cx="244" cy="218" r="20" fill="var(--color-ink)" />
+                  <circle cx="244" cy="218" r="9" fill="var(--color-accent)" />
+                  <circle cx="254" cy="206" r="5" fill="var(--color-paper)" />
+                  <path d="M166 292 q34 26 68 0" stroke="var(--color-paper)" stroke-width="7" stroke-linecap="round" />
+                </g>
+                <path class="par p3" d="M84 84 L84 144 L134 114 Z" fill="var(--color-accent)" />
+              </svg>
+            )}
+            <span class="hover-pill" aria-hidden="true">{t('team.pill')} →</span>
+          </div>
+          <div class="pt-5">
+            <h3 class="team-name text-ink mb-0 group-hover:text-accent transition-colors">{m.name}</h3>
+            <p class="font-display italic text-muted mt-1.5">{m.role}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <p class="reveal fadeInUp md:hidden text-muted leading-relaxed text-center mt-10">
+      {t('team.text')}
+    </p>
+  </div>
+</section>
+
+<style>
+  .team-name {
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-size: clamp(1.25rem, 1.05rem + 0.9vw, 1.65rem);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+  }
+</style>
+
+<script>
+  import { initPointerParallax } from '../../scripts/pointer-parallax';
+  initPointerParallax();
+</script>

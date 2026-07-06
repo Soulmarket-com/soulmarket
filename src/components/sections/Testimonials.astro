@@ -1,0 +1,45 @@
+---
+// Placeholder content — see testimonials.note. Replace with real client
+// quotes before launch.
+import { useTranslations } from '../../i18n/utils';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const items = [
+  { quote: t('testimonials.1.quote'), author: t('testimonials.1.author'), role: t('testimonials.1.role') },
+  { quote: t('testimonials.2.quote'), author: t('testimonials.2.author'), role: t('testimonials.2.role') },
+  { quote: t('testimonials.3.quote'), author: t('testimonials.3.author'), role: t('testimonials.3.role') },
+];
+---
+
+<section class="section-gap bg-surface">
+  <div class="container-lg">
+    <div class="reveal fadeInUp text-center max-w-2xl mx-auto mb-4">
+      <p class="section-caption">{t('testimonials.eyebrow')}</p>
+      <h2 class="section-title-small text-ink">{t('testimonials.title')}</h2>
+    </div>
+    <p class="text-center text-xs text-gray-1 mb-16">{t('testimonials.note')}</p>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      {items.map((item, i) => (
+        <div class="reveal fadeInUp bg-white rounded-2xl border border-border p-8" style={`--reveal-delay:${i * 0.1}s`}>
+          <p class="text-ink leading-relaxed mb-6">&ldquo;{item.quote}&rdquo;</p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-gray-light-3 flex items-center justify-center text-xs font-semibold text-gray-1">
+              {item.author.split(' ').map((w) => w[0]).join('')}
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-ink">{item.author}</p>
+              <p class="text-xs text-gray-1">{item.role}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

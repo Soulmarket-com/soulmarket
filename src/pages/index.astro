@@ -1,8 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
 import Hero from '../components/sections/Hero.astro';
+import Marquee from '../components/sections/Marquee.astro';
+import Story from '../components/sections/Story.astro';
 import Services from '../components/sections/Services.astro';
 import FeaturedPortfolio from '../components/sections/FeaturedPortfolio.astro';
+import Team from '../components/sections/Team.astro';
 import LatestBlog from '../components/sections/LatestBlog.astro';
 import CtaBanner from '../components/sections/CtaBanner.astro';
 import { getCollection } from 'astro:content';
@@ -28,8 +31,11 @@ const latestPosts = posts
   lang="es"
 >
   <Hero lang={lang} />
+  <Marquee lang={lang} />
+  <Story lang={lang} />
   <Services lang={lang} />
   <FeaturedPortfolio lang={lang} items={portfolioItems} />
+  <Team lang={lang} />
   <LatestBlog lang={lang} posts={latestPosts} />
   <CtaBanner lang={lang} />
 </Base>

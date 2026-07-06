@@ -2,7 +2,7 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { getLangFromUrl } from '../i18n/utils';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
 
 interface Props {
   title: string;
@@ -10,11 +10,13 @@ interface Props {
   image?: string;
   lang?: 'es' | 'en';
   type?: 'website' | 'article';
+  noindex?: boolean;
 }
 
-const { title, description, image = '/og-default.jpg', lang, type = 'website' } = Astro.props;
+const { title, description, image = '/og-default.jpg', lang, type = 'website', noindex = false } = Astro.props;
 
 const resolvedLang = lang ?? getLangFromUrl(Astro.url);
+const t = useTranslations(resolvedLang);
 const siteUrl = 'https://soulmarket.com';
 const canonical = new URL(Astro.url.pathname, siteUrl).href;
 const ogImage = image.startsWith('http') ? image : new URL(image, siteUrl).href;
@@ -36,7 +38,12 @@ const schema = JSON.stringify({
   description: resolvedLang === 'es'
     ? 'Diseño web, fotografía, video y marketing digital para marcas que quieren destacar.'
     : 'Web design, photography, video and digital marketing for brands that want to stand out.',
-  founder: { '@type': 'Person', name: 'José Miguel' },
+  founder: { '@type': 'Person', name: 'José Miguel Díaz' },
+  employee: [
+    { '@type': 'Person', name: 'José Miguel Díaz', jobTitle: 'Development & Technical Direction' },
+    { '@type': 'Person', name: 'Marcela Talero', jobTitle: 'Marketing & Communications' },
+    { '@type': 'Person', name: 'Sergio Guild', jobTitle: 'Audiovisual Direction' },
+  ],
   knowsLanguage: ['es', 'en'],
   serviceType: ['Web Design', 'Graphic Design', 'Photography', 'Digital Marketing'],
 });
@@ -48,10 +55,12 @@ const schema = JSON.stringify({
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#FAF6EF" />
 
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
 
     <meta property="og:type" content={type} />
     <meta property="og:title" content={fullTitle} />
@@ -75,15 +84,45 @@ const schema = JSON.stringify({
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..600&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet" />
 
     <script type="application/ld+json" set:html={schema} />
   </head>
   <body>
+    <a href="#main" class="skip-link">{t('skip.content')}</a>
     <Header lang={resolvedLang} />
-    <main>
+    <main id="main">
       <slot />
     </main>
     <Footer lang={resolvedLang} />
+
+    <script>
+      // Scroll-reveal: toggles `.is-visible` on any `.reveal` element once it
+      // enters the viewport. Pairs with the fadeIn*/reveal CSS in global.css.
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          }
+        },
+        { threshold: 0.15, rootMargin: '0px 0px -10% 0px' }
+      );
+
+      function observeReveals() {
+        document.querySelectorAll('.reveal:not(.is-visible)').forEach((el) => observer.observe(el));
+      }
+
+      observeReveals();
+      // Re-run if View Transitions is ever enabled for this project.
+      document.addEventListener('astro:page-load', observeReveals);
+    </script>
+
+    <script>
+      import { initScrollAnimations } from '../scripts/scroll-animations';
+      initScrollAnimations();
+    </script>
   </body>
 </html>

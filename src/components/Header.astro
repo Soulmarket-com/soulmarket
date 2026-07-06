@@ -1,5 +1,6 @@
 ---
 import { useTranslations, routes } from '../i18n/utils';
+import AnimatedButton from './ui/AnimatedButton.astro';
 
 interface Props {
   lang: 'es' | 'en';
@@ -12,6 +13,7 @@ const otherLang = lang === 'es' ? 'en' : 'es';
 const otherLangUrl = lang === 'es' ? '/en/' : '/';
 
 const navItems = [
+  { label: t('nav.home'), href: r.home },
   { label: t('nav.services'), href: r.services },
   { label: t('nav.portfolio'), href: r.portfolio },
   { label: t('nav.blog'), href: r.blog },
@@ -19,6 +21,7 @@ const navItems = [
 ];
 
 const path = Astro.url.pathname;
+const year = new Date().getFullYear();
 
 function isActive(href: string) {
   if (href === '/' || href === '/en/') return path === href;
@@ -26,101 +29,120 @@ function isActive(href: string) {
 }
 ---
 
-<header class="fixed top-0 left-0 right-0 z-50 bg-ink/95 backdrop-blur-sm border-b border-white/10">
-  <nav class="container-lg flex items-center justify-between h-16">
-    <a href={r.home} class="text-white font-bold text-xl tracking-tight hover:text-accent-light transition-colors">
-      Soulmarket
+<header id="site-header" class="site-header fixed top-0 left-0 right-0 z-50">
+  <nav class="site-header-nav relative flex items-center justify-between">
+    <a href={r.home} class="site-logo font-display font-semibold text-xl tracking-tight transition-colors">
+      soulmarket<span class="text-accent">.</span>
     </a>
 
-    <ul class="hidden md:flex items-center gap-0.5">
-      {navItems.map(({ label, href }) => (
-        <li>
-          <a
-            href={href}
-            class:list={[
-              'px-3.5 py-2 text-sm font-medium rounded-lg transition-colors',
-              isActive(href)
-                ? 'text-white bg-white/10'
-                : 'text-white/65 hover:text-white hover:bg-white/5',
-            ]}
-          >
-            {label}
-          </a>
-        </li>
-      ))}
-    </ul>
+    <p class="site-tagline hidden lg:block absolute left-1/2 -translate-x-1/2 text-[11px] uppercase tracking-[0.24em] font-medium pointer-events-none" aria-hidden="true">
+      {t('nav.tagline')}
+    </p>
 
-    <div class="hidden md:flex items-center gap-3">
+    <div class="flex items-center gap-3 md:gap-4">
       <a
         href={otherLangUrl}
-        class="text-xs text-white/40 hover:text-white/70 transition-colors uppercase tracking-widest font-semibold"
+        class="site-lang hidden sm:inline text-xs uppercase tracking-widest font-semibold transition-colors"
         hreflang={otherLang}
       >
         {otherLang}
       </a>
-      <a
-        href={r.contact}
-        class="bg-accent hover:bg-accent-dark text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+      <AnimatedButton href={r.contact} variant="grad" size="small" class="hidden sm:inline-flex">{t('nav.cta')}</AnimatedButton>
+      <button
+        id="menu-btn"
+        class="menu-toggle -mr-2"
+        aria-label={t('nav.menuLabel')}
+        aria-expanded="false"
+        aria-controls="site-menu"
       >
-        {t('nav.cta')}
+        <span class="menu-toggle-bar" aria-hidden="true"></span>
+        <span class="menu-toggle-bar" aria-hidden="true"></span>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<!-- Menú a pantalla completa (referencia epic.net): cortina oscura, nav serif
+     a la izquierda, mega-CTA a la derecha y barra inferior de contacto. -->
+<div id="site-menu" class="menu-overlay light-content" role="dialog" aria-modal="true" aria-label={t('nav.menuLabel')}>
+  <div class="container-lg relative flex-1 flex flex-col w-full min-h-full">
+    <div class="flex-1 grid lg:grid-cols-[1.1fr_auto_1fr] gap-10 lg:gap-16 items-center pt-28 pb-8 lg:pb-16">
+      <nav>
+        <ul class="flex flex-col gap-1 md:gap-2">
+          {navItems.map(({ label, href }, i) => (
+            <li class="menu-item" style={`--menu-i:${i}`}>
+              <a
+                href={href}
+                class:list={['menu-link', isActive(href) && 'is-active']}
+                aria-current={isActive(href) ? 'page' : undefined}
+              >
+                <span class="menu-index" aria-hidden="true">0{i + 1}</span>
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div class="menu-divider hidden lg:block self-stretch" aria-hidden="true"></div>
+
+      <a href={r.contact} class="menu-start menu-item block text-center" style={`--menu-i:${navItems.length}`}>
+        <span class="menu-start-small">{t('menu.start.pre')}</span>
+        <span class="menu-start-big">
+          <em>{t('menu.start.italic')}</em>
+          {t('menu.start.big')}
+        </span>
+        <span class="menu-start-small">{t('menu.start.post')}</span>
       </a>
     </div>
 
-    <button
-      id="menu-btn"
-      class="md:hidden text-white p-2 -mr-2 rounded-lg hover:bg-white/5 transition-colors"
-      aria-label="Toggle menu"
-      aria-expanded="false"
-    >
-      <svg id="icon-open" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-      </svg>
-      <svg id="icon-close" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-      </svg>
-    </button>
-  </nav>
-
-  <div id="mobile-menu" class="hidden md:hidden border-t border-white/10">
-    <ul class="container-lg py-4 flex flex-col gap-0.5">
-      {navItems.map(({ label, href }) => (
-        <li>
-          <a
-            href={href}
-            class:list={[
-              'block px-3 py-2.5 text-sm font-medium rounded-lg transition-colors',
-              isActive(href)
-                ? 'text-white bg-white/10'
-                : 'text-white/65 hover:text-white hover:bg-white/5',
-            ]}
-          >
-            {label}
-          </a>
-        </li>
-      ))}
-      <li class="pt-3 mt-1 border-t border-white/10 flex items-center justify-between px-3">
-        <a href={otherLangUrl} class="text-xs text-white/40 hover:text-white uppercase tracking-widest font-semibold">
+    <div class="menu-footer menu-item flex flex-wrap items-center justify-between gap-x-8 gap-y-3 py-6" style={`--menu-i:${navItems.length + 1}`}>
+      <a href="mailto:hola@soulmarket.com" class="font-display italic text-lg md:text-xl text-paper hover:text-accent-light transition-colors">
+        hola@soulmarket.com
+      </a>
+      <div class="flex items-center gap-6">
+        <a href={otherLangUrl} hreflang={otherLang} class="text-xs uppercase tracking-widest font-semibold text-paper/50 hover:text-paper transition-colors">
           {otherLang}
         </a>
-        <a href={r.contact} class="bg-accent text-white text-sm font-semibold px-4 py-2 rounded-lg">
-          {t('nav.cta')}
-        </a>
-      </li>
-    </ul>
+        <span class="text-xs text-paper/35">© {year} Soulmarket</span>
+      </div>
+    </div>
   </div>
-</header>
+</div>
 
 <script>
+  const header = document.getElementById('site-header');
   const btn = document.getElementById('menu-btn');
-  const menu = document.getElementById('mobile-menu');
-  const iconOpen = document.getElementById('icon-open');
-  const iconClose = document.getElementById('icon-close');
+  const overlay = document.getElementById('site-menu');
+
+  function setOpen(open: boolean) {
+    overlay?.classList.toggle('is-open', open);
+    header?.classList.toggle('menu-open', open);
+    document.documentElement.classList.toggle('menu-locked', open);
+    btn?.setAttribute('aria-expanded', String(open));
+  }
 
   btn?.addEventListener('click', () => {
-    const isOpen = !menu?.classList.contains('hidden');
-    menu?.classList.toggle('hidden', isOpen);
-    iconOpen?.classList.toggle('hidden', !isOpen);
-    iconClose?.classList.toggle('hidden', isOpen);
-    btn.setAttribute('aria-expanded', String(!isOpen));
+    setOpen(!overlay?.classList.contains('is-open'));
   });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay?.classList.contains('is-open')) {
+      setOpen(false);
+      btn?.focus();
+    }
+  });
+
+  // Header expansivo: alineado a la retícula arriba, a los bordes del viewport al hacer scroll
+  let ticking = false;
+  const onScroll = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      header?.classList.toggle('is-scrolled', window.scrollY > 24);
+      ticking = false;
+    });
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
 </script>
