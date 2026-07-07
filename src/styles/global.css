@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+/* Fuentes autoalojadas (antes Google Fonts): mejor LCP, sin terceros (RGPD).
+   Variantes "opsz" de Fraunces = ejes opsz+wght, necesarios para el 850 óptico. */
+@import "@fontsource-variable/fraunces/opsz.css";
+@import "@fontsource-variable/fraunces/opsz-italic.css";
+@import "@fontsource-variable/instrument-sans";
+@import "@fontsource-variable/instrument-sans/wght-italic.css";
+
 /*
  * Design tokens ported from the Resonance template (skin: "main").
  * Kept alongside the original Soulmarket brand tokens (accent/ink/paper/...)
@@ -17,8 +24,8 @@
   --color-surface: #f2ebde;
   --color-border: #e6dccb;
 
-  --font-family-sans: 'Instrument Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-family-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-family-sans: 'Instrument Sans Variable', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-family-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
 
   /* Gama cálida coral→ámbar (sustituye al gradiente violeta de Resonance) */
   --color-primary-1: #e89a3c;
@@ -206,7 +213,7 @@
     align-items: center;
     gap: 0.6em;
     margin-bottom: 25px;
-    color: var(--color-accent);
+    color: var(--color-accent-dark); /* AA 4.83:1 sobre papel (el coral base da 3.4) */
     font-size: 13px;
     font-weight: 600;
     text-transform: uppercase;
@@ -327,7 +334,6 @@
     transition: var(--transition-default);
   }
   .btn-mod:hover, .btn-mod:focus-visible {
-    color: #fff;
     text-decoration: none;
   }
   .btn-mod:focus-visible {
@@ -338,16 +344,17 @@
   .btn-mod.btn-small { padding: 7px 17px; font-size: 12px; letter-spacing: 0.06em; }
   .btn-mod.btn-large { padding: 16px 34px 15px; font-size: 13px; letter-spacing: 0.085em; }
 
-  .btn-mod.btn-primary { background: var(--color-accent); color: #fff; }
-  .btn-mod.btn-primary:hover { background: var(--color-accent-dark); }
+  /* Texto en tinta sobre coral: AA 4.88:1 (blanco sobre coral daba 3.66) */
+  .btn-mod.btn-primary { background: var(--color-accent); color: var(--color-ink); }
+  .btn-mod.btn-primary:hover { background: var(--color-accent-light); }
 
   /* "grad" se conserva como nombre histórico: hoy es el CTA coral principal */
   .btn-mod.btn-grad {
     background: var(--color-accent);
-    color: #fff;
+    color: var(--color-ink);
     border: none;
   }
-  .btn-mod.btn-grad:hover { background: var(--color-accent-dark); }
+  .btn-mod.btn-grad:hover { background: var(--color-accent-light); }
 
   .btn-mod.btn-white { color: var(--color-ink); background: var(--color-paper); }
   .btn-mod.btn-white:hover { background: #fff; }
@@ -630,6 +637,7 @@
     display: flex;
     flex-direction: column;
     overflow-y: auto;
+    overscroll-behavior: contain;
     background: var(--color-dark-1);
     visibility: hidden;
     opacity: 0;
@@ -832,6 +840,10 @@
     background: var(--gradient-primary);
     pointer-events: none;
   }
+
+  /* AA: la utilidad text-accent se oscurece para texto (los gráficos y palabras
+     gigantes usan var(--color-accent) directamente y conservan el coral vivo) */
+  .text-accent { color: var(--color-accent-dark); }
 
   .prose-content h2 { font-family: var(--font-family-display); font-size: 1.7rem; font-weight: 600; color: var(--color-ink); margin-top: 2.25rem; margin-bottom: 0.75rem; }
   .prose-content h3 { font-family: var(--font-family-display); font-size: 1.3rem; font-weight: 600; color: var(--color-ink); margin-top: 1.75rem; margin-bottom: 0.5rem; }

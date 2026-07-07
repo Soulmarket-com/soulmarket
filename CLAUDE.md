@@ -28,6 +28,7 @@ Web profesional de agencia de tres personas: José Miguel Díaz (desarrollo/téc
 - Animaciones de entrada: clases `reveal` + `fadeInUp`/`fadeInRight` con `--reveal-delay`
 - Toda cadena visible pasa por `t('clave')` de `useTranslations(lang)` — nunca texto hardcodeado, y siempre añadir la clave en ES y EN en `ui.ts`
 - Enlaces internos vía `routes[lang]`, nunca rutas a mano
+- Contraste AA: el coral vivo (`--color-accent`) solo para gráficos y tipografía grande; el texto pequeño acentuado usa `--color-accent-dark` (la utilidad `.text-accent` ya está oscurecida en global.css) y los botones coral llevan texto en tinta, nunca blanco
 
 ## SEO
 

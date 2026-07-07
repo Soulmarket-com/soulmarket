@@ -17,7 +17,11 @@ const repeats = [0, 1, 2, 3];
   <p class="reveal fadeInUp text-center pt-14 text-xs font-semibold uppercase tracking-[0.22em] text-muted">
     {t('cta.note')}
   </p>
-  <a href={r.contact} class="contact-marquee group block overflow-hidden py-10 md:py-14" aria-label={t('cta.primary')}>
+  <div class="contact-marquee relative overflow-hidden py-10 md:py-14">
+    <!-- Enlace-overlay: nombre accesible limpio; el marquee es decorativo -->
+    <a href={r.contact} class="absolute inset-0 z-10">
+      <span class="sr-only">{`${t('cta.marquee')} — ${t('cta.primary')}`}</span>
+    </a>
     <div class="contact-marquee-track" aria-hidden="true">
       {[0, 1].map(() => (
         <span class="contact-marquee-seq">
@@ -38,7 +42,7 @@ const repeats = [0, 1, 2, 3];
         </span>
       ))}
     </div>
-  </a>
+  </div>
 </section>
 
 <style>
@@ -48,7 +52,7 @@ const repeats = [0, 1, 2, 3];
     animation: contact-marquee-scroll 26s linear infinite;
   }
   .contact-marquee:hover .contact-marquee-track,
-  .contact-marquee:focus-visible .contact-marquee-track {
+  .contact-marquee:focus-within .contact-marquee-track {
     animation-play-state: paused;
   }
   .contact-marquee-seq {
@@ -65,7 +69,7 @@ const repeats = [0, 1, 2, 3];
     transition: color 0.3s var(--ease-default);
   }
   .contact-marquee:hover .contact-marquee-item,
-  .contact-marquee:focus-visible .contact-marquee-item {
+  .contact-marquee:focus-within .contact-marquee-item {
     color: var(--color-accent);
   }
   .contact-marquee-heart {

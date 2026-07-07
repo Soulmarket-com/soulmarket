@@ -52,11 +52,13 @@ fecha; al hacer cambios de SEO, documentarlos aquí.
 |---|---|---|
 | SSG puro (Astro, 0 JS de framework; solo scripts pequeños de interacción) | ✅ | arquitectura |
 | Imágenes con `width/height` (evita CLS) y `loading="lazy"` bajo el fold | ✅ | componentes |
-| `preconnect` a Google Fonts + `display=swap` | ✅ | `Base.astro` |
+| **Fuentes autoalojadas** (@fontsource-variable, adiós Google Fonts: menos latencia y sin terceros/RGPD) | ✅ 2026-07-07 | `global.css` (imports) |
 | Animaciones respetan `prefers-reduced-motion` (incluido scroll suave) | ✅ 2026-07-07 | `global.css` |
 | Sin overflow horizontal en móvil (verificado a 390px en las 8 rutas) | ✅ 2026-07-07 | `scripts/mobile-check.mjs` |
-| **Self-hosting de fuentes** (eliminar dependencia de Google Fonts, mejora LCP y RGPD) | ⬜ pendiente (auditoría #9) | — |
-| Auditoría Lighthouse completa | ⬜ pendiente (auditoría #9) | — |
+| **Lighthouse (móvil, build de producción, 2026-07-07)**: home **Perf 95 · A11y 100 · BP 100 · SEO 100** — TBT 0 ms, CLS 0, LCP 2,4 s (throttling móvil). `/contacto` y `/servicios` A11y 100 | ✅ 2026-07-07 | `npx lighthouse` sobre `astro preview` |
+| Contraste AA: texto pequeño con acento pasa de coral #e8542f (3.4:1) a coral oscuro #c43d1d (4.83:1); botones coral con texto tinta (4.88:1, antes blanco 3.66:1); footer legal a white/60 | ✅ 2026-07-07 | `global.css` (`.text-accent`, `.section-caption`, `.btn-mod`) |
+| Foco/teclado: trampa de foco en el menú overlay (foco al abrir, Tab circular, Esc restaura al botón), `overscroll-behavior: contain` | ✅ 2026-07-07 | `Header.astro` + `global.css` |
+| Jerarquía de encabezados sin saltos (footer h3→h2); marquee de contacto con enlace-overlay `sr-only` (nombre accesible limpio) | ✅ 2026-07-07 | `Footer.astro`, `CtaBanner.astro` |
 
 ### Contenido
 

@@ -35,7 +35,7 @@ const year = new Date().getFullYear();
 
       <!-- Services -->
       <div class="md:col-span-3">
-        <h3 class="text-white text-xs font-semibold uppercase tracking-widest mb-5">{t('nav.services')}</h3>
+        <h2 class="text-white text-xs font-semibold uppercase tracking-widest mb-5">{t('nav.services')}</h2>
         <ul class="space-y-3">
           <li><a href={`${r.services}#web`} class="text-sm hover:text-white transition-colors">{t('service.web.title')}</a></li>
           <li><a href={`${r.services}#design`} class="text-sm hover:text-white transition-colors">{t('service.design.title')}</a></li>
@@ -46,7 +46,7 @@ const year = new Date().getFullYear();
 
       <!-- Pages -->
       <div class="md:col-span-2">
-        <h3 class="text-white text-xs font-semibold uppercase tracking-widest mb-5">Soulmarket</h3>
+        <h2 class="text-white text-xs font-semibold uppercase tracking-widest mb-5">Soulmarket</h2>
         <ul class="space-y-3">
           <li><a href={r.portfolio} class="text-sm hover:text-white transition-colors">{t('nav.portfolio')}</a></li>
           <li><a href={r.blog} class="text-sm hover:text-white transition-colors">{t('nav.blog')}</a></li>
@@ -57,7 +57,7 @@ const year = new Date().getFullYear();
 
       <!-- Contact -->
       <div class="md:col-span-2">
-        <h3 class="text-white text-xs font-semibold uppercase tracking-widest mb-5">{t('nav.contact')}</h3>
+        <h2 class="text-white text-xs font-semibold uppercase tracking-widest mb-5">{t('nav.contact')}</h2>
         <ul class="space-y-3">
           <li>
             <a href="mailto:hola@soulmarket.com" class="text-sm hover:text-white transition-colors break-all">
@@ -69,10 +69,10 @@ const year = new Date().getFullYear();
     </div>
 
     <div class="mt-12 pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4">
-      <p class="text-xs text-white/30">
+      <p class="text-xs text-white/60">
         &copy; {year} Soulmarket. {t('footer.rights')}
       </p>
-      <a href={r.privacy} class="text-xs text-white/30 hover:text-white transition-colors">
+      <a href={r.privacy} class="text-xs text-white/60 hover:text-white transition-colors">
         {t('footer.privacy')}
       </a>
     </div>
