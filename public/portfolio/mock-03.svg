@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">
+<rect width="800" height="500" fill="#f3e3b8"/>
+<path d="M420 120 L580 420 L260 420 Z" fill="#171310"/><circle cx="580" cy="180" r="40" fill="#e8542f"/>
+<text x="56" y="452" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="100" fill="#171310" opacity="0.85">03</text>
+</svg>

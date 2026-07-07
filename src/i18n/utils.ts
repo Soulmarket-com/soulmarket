@@ -22,6 +22,7 @@ export const routes = {
     blog: '/blog',
     about: '/sobre-mi',
     contact: '/contacto',
+    privacy: '/privacidad',
   },
   en: {
     home: '/en/',
@@ -30,6 +31,7 @@ export const routes = {
     blog: '/en/blog',
     about: '/en/about',
     contact: '/en/contact',
+    privacy: '/en/privacy',
   },
 } as const;
 

@@ -1,16 +1,17 @@
 ---
 import Base from '../layouts/Base.astro';
+import ServicesDetail from '../components/sections/ServicesDetail.astro';
+import type { ServiceDetailItem } from '../components/sections/ServicesDetail.astro';
 import CtaBanner from '../components/sections/CtaBanner.astro';
-import { useTranslations, routes } from '../i18n/utils';
+import { useTranslations } from '../i18n/utils';
 
 const lang = 'es';
 const t = useTranslations(lang);
-const r = routes[lang];
 
-const services = [
+const services: ServiceDetailItem[] = [
   {
     id: 'web',
-    icon: '⚡',
+    art: 'web',
     title: t('service.web.title'),
     desc: t('service.web.desc'),
     bullets: [
@@ -27,7 +28,7 @@ const services = [
   },
   {
     id: 'uxui',
-    icon: '◐',
+    art: 'uxui',
     title: t('service.uxui.title'),
     desc: t('service.uxui.desc'),
     bullets: [
@@ -41,7 +42,7 @@ const services = [
   },
   {
     id: 'design',
-    icon: '✦',
+    art: 'design',
     title: t('service.design.title'),
     desc: t('service.design.desc'),
     bullets: [
@@ -55,7 +56,7 @@ const services = [
   },
   {
     id: 'media',
-    icon: '◉',
+    art: 'media',
     title: t('service.media.title'),
     desc: t('service.media.desc'),
     bullets: [
@@ -69,7 +70,7 @@ const services = [
   },
   {
     id: 'marketing',
-    icon: '◈',
+    art: 'marketing',
     title: t('service.marketing.title'),
     desc: t('service.marketing.desc'),
     bullets: [
@@ -87,55 +88,22 @@ const services = [
 
 <Base
   title="Servicios de diseño web, fotografía y marketing"
-  description="Diseño y desarrollo web, diseño gráfico, fotografía, video y marketing digital. Presupuesto personalizado sin compromiso."
-  lang="es"
+  description="Diseño y desarrollo web, diseño gráfico, fotografía, video y marketing digital. Precios claros y presupuesto sin compromiso."
+  lang={lang}
 >
-  <!-- Page header -->
-  <header class="bg-ink text-white pt-28 pb-16">
-    <div class="container-lg">
-      <span class="text-accent-light text-xs font-semibold uppercase tracking-widest">{t('services.eyebrow')}</span>
-      <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold mt-3 tracking-tight">{t('services.title')}</h1>
-      <p class="mt-5 text-white/55 text-lg max-w-2xl">
-        Soluciones digitales completas para autónomos y empresas que quieren crecer online.
+  <header class="hero-columns relative overflow-hidden pt-28 md:pt-36 pb-8 md:pb-12">
+    <div class="container-lg relative">
+      <h1 class="reveal fadeInUp giant-heading text-ink mb-0">
+        <em class="block">{t('services.giant.italic')}</em>
+        <span class="block">{t('services.giant.main')}</span>
+      </h1>
+      <p class="reveal fadeInUp section-descr max-w-xl mt-7" style="--reveal-delay:0.1s">
+        {t('services.page.intro')}
       </p>
     </div>
   </header>
 
-  <!-- Services detail -->
-  <section class="section-gap">
-    <div class="container-lg space-y-24">
-      {services.map((s, i) => (
-        <div id={s.id} class:list={['grid grid-cols-1 md:grid-cols-2 gap-12 items-center', i % 2 !== 0 && 'md:[&>:first-child]:order-2']}>
-          <!-- Text -->
-          <div>
-            <div class="text-3xl mb-5 w-12 h-12 flex items-center justify-center bg-surface rounded-xl">{s.icon}</div>
-            <h2 class="text-2xl sm:text-3xl font-extrabold text-ink mb-4">{s.title}</h2>
-            <p class="text-muted text-base leading-relaxed mb-6">{s.desc}</p>
-            <ul class="space-y-2.5 mb-8">
-              {s.bullets.map(bullet => (
-                <li class="flex items-start gap-3 text-sm text-ink">
-                  <svg class="w-4 h-4 text-accent mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
-                  </svg>
-                  {bullet}
-                </li>
-              ))}
-            </ul>
-            <div class="flex items-center gap-4">
-              <span class="text-2xl font-extrabold text-ink">{s.price}</span>
-              <a href={r.contact} class="bg-accent hover:bg-accent-dark text-white font-semibold px-5 py-2.5 rounded-lg text-sm transition-colors">
-                {t('nav.cta')}
-              </a>
-            </div>
-          </div>
-          <!-- Placeholder visual -->
-          <div class="aspect-square bg-surface rounded-2xl flex items-center justify-center text-6xl">
-            {s.icon}
-          </div>
-        </div>
-      ))}
-    </div>
-  </section>
+  <ServicesDetail lang={lang} services={services} />
 
   <CtaBanner lang={lang} />
 </Base>

@@ -1,0 +1,90 @@
+---
+import { useTranslations, routes } from '../../i18n/utils';
+import ServiceArt from '../ui/ServiceArt.astro';
+import AnimatedButton from '../ui/AnimatedButton.astro';
+
+export interface ServiceDetailItem {
+  id: string;
+  art: 'web' | 'uxui' | 'design' | 'media' | 'marketing';
+  title: string;
+  desc: string;
+  bullets: string[];
+  price: string;
+}
+
+interface Props {
+  lang: 'es' | 'en';
+  services: ServiceDetailItem[];
+}
+
+const { lang, services } = Astro.props;
+const t = useTranslations(lang);
+const r = routes[lang];
+
+const artBg: Record<ServiceDetailItem['art'], string> = {
+  web: 'var(--color-dark-1)',
+  uxui: 'var(--color-secondary-1)',
+  design: 'var(--color-accent)',
+  media: 'var(--color-gray-light-3)',
+  marketing: 'var(--color-primary-1)',
+};
+---
+
+<div class="container-lg">
+  {services.map((s, i) => (
+    <section
+      id={s.id}
+      class:list={['py-16 md:py-24', i > 0 && 'border-t border-border']}
+    >
+      <div class:list={['grid md:grid-cols-2 gap-12 lg:gap-20 items-center', i % 2 !== 0 && 'md:[&>:first-child]:order-2']}>
+        <a href={r.contact} class="parallax-card group block reveal fadeInUp" aria-label={t('nav.cta')}>
+          <div class="parallax-art relative aspect-[4/3] rounded-xl overflow-hidden" style={`background:${artBg[s.art]}`}>
+            <ServiceArt art={s.art} />
+            <span class="hover-pill" aria-hidden="true">{t('nav.cta')} →</span>
+          </div>
+        </a>
+
+        <div class="reveal fadeInUp" style="--reveal-delay:0.1s">
+          <p class="text-xs font-bold text-accent tracking-[0.25em] mb-3" aria-hidden="true">0{i + 1}</p>
+          <h2 class="service-detail-title text-ink mb-0">{s.title}</h2>
+          <p class="font-display italic text-muted text-lg mt-3 max-w-lg">{s.desc}</p>
+
+          <ul class="mt-8 grid sm:grid-cols-2 gap-x-8 gap-y-3">
+            {s.bullets.map((bullet) => (
+              <li class="flex items-start gap-2.5 text-sm text-ink leading-snug">
+                <svg class="w-3.5 h-3.5 mt-0.5 shrink-0" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+                  <path
+                    d="M50 32 C 44 16, 22 12, 14 26 C 6 40, 16 56, 30 68 C 38 75, 46 82, 50 88 C 54 81, 63 74, 71 66 C 84 54, 94 39, 85 26 C 76 13, 55 17, 50 32 Z"
+                    fill="var(--color-accent)"
+                  />
+                </svg>
+                {bullet}
+              </li>
+            ))}
+          </ul>
+
+          <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
+            <span class="font-display italic font-medium lowercase text-2xl md:text-3xl text-accent">{s.price}</span>
+            <AnimatedButton href={r.contact} variant="border">{t('nav.cta')}</AnimatedButton>
+          </div>
+        </div>
+      </div>
+    </section>
+  ))}
+</div>
+
+<style>
+  .service-detail-title {
+    font-optical-sizing: auto;
+    font-weight: 850;
+    font-size: clamp(1.75rem, 1.2rem + 2.4vw, 3rem);
+    line-height: 1;
+    letter-spacing: -0.015em;
+    text-transform: uppercase;
+  }
+</style>
+
+<script>
+  import { initPointerParallax } from '../../scripts/pointer-parallax';
+  initPointerParallax();
+</script>

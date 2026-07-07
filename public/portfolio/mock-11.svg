@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">
+<rect width="800" height="500" fill="#e8e0d1"/>
+<rect x="270" y="290" width="70" height="130" fill="#171310"/><rect x="380" y="230" width="70" height="190" fill="#171310"/><rect x="490" y="150" width="70" height="270" fill="#e8542f"/>
+<text x="56" y="452" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="100" fill="#171310" opacity="0.85">11</text>
+</svg>

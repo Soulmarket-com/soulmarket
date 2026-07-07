@@ -1,0 +1,62 @@
+---
+// Índice editorial de artículos (filas con fecha, título serif y flecha),
+// compartido por la sección LatestBlog de la home y la página /blog.
+import { useTranslations, routes } from '../../i18n/utils';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  lang: 'es' | 'en';
+  posts: CollectionEntry<'blog'>[];
+}
+
+const { lang, posts } = Astro.props;
+const t = useTranslations(lang);
+const r = routes[lang];
+
+function formatDate(date: Date) {
+  return new Intl.DateTimeFormat(lang === 'es' ? 'es-ES' : 'en-US', {
+    year: 'numeric', month: 'short', day: 'numeric',
+  }).format(date);
+}
+---
+
+{posts.length === 0 ? (
+  <p class="text-center text-muted py-16">{t('blog.empty')}</p>
+) : (
+  <ol class="border-t border-border">
+    {posts.map((post, i) => (
+      <li class="border-b border-border">
+        <a
+          href={`${r.blog}/${post.id}`}
+          class="blog-row reveal fadeInUp group grid md:grid-cols-[9.5rem_1fr_auto] items-baseline gap-x-8 gap-y-1 py-7 md:py-8"
+          style={`--reveal-delay:${Math.min(i, 5) * 0.08}s`}
+        >
+          <time class="text-xs font-semibold uppercase tracking-[0.16em] text-muted" datetime={post.data.pubDate.toISOString()}>
+            {formatDate(post.data.pubDate)}
+          </time>
+          <div>
+            <h3 class="blog-row-title text-ink mb-0">{post.data.title}</h3>
+            <p class="font-display italic text-muted mt-1.5 line-clamp-1 hidden md:block">{post.data.description}</p>
+          </div>
+          <span class="hidden md:inline text-2xl text-accent transition-transform duration-300 group-hover:translate-x-2 self-center" aria-hidden="true">→</span>
+        </a>
+      </li>
+    ))}
+  </ol>
+)}
+
+<style>
+  .blog-row-title {
+    font-family: var(--font-family-display);
+    font-weight: 600;
+    font-size: clamp(1.35rem, 1.1rem + 1.2vw, 2rem);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    transition: color 0.25s var(--ease-default);
+  }
+  .blog-row:hover .blog-row-title,
+  .blog-row:focus-visible .blog-row-title {
+    font-style: italic;
+    color: var(--color-accent);
+  }
+</style>

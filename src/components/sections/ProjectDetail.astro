@@ -1,0 +1,128 @@
+---
+import { useTranslations, routes } from '../../i18n/utils';
+import AnimatedButton from '../ui/AnimatedButton.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  lang: 'es' | 'en';
+  item: CollectionEntry<'portfolio'>;
+  prev: CollectionEntry<'portfolio'> | null;
+  next: CollectionEntry<'portfolio'> | null;
+}
+
+const { lang, item, prev, next } = Astro.props;
+const t = useTranslations(lang);
+const r = routes[lang];
+
+const formattedDate = new Intl.DateTimeFormat(lang === 'es' ? 'es-ES' : 'en-US', {
+  year: 'numeric', month: 'long',
+}).format(item.data.date);
+
+const categoryLabels: Record<string, string> = {
+  web: t('portfolio.filter.web'),
+  design: t('portfolio.filter.design'),
+  'photo-video': t('portfolio.filter.media'),
+  marketing: t('portfolio.filter.marketing'),
+};
+---
+
+<article>
+  <header class="hero-columns relative overflow-hidden pt-28 md:pt-32 pb-10 md:pb-14">
+    <div class="container-lg relative">
+      <a href={r.portfolio} class="btn-animate-y inline-block text-sm font-semibold text-muted hover:text-ink transition-colors mb-10">
+        <span class="btn-animate-y-1">← {t('portfolio.back')}</span>
+        <span class="btn-animate-y-2" aria-hidden="true">← {t('portfolio.back')}</span>
+      </a>
+
+      <div class="flex flex-wrap items-baseline gap-x-4 gap-y-2 mb-5">
+        <span class="text-xs font-medium text-accent bg-accent/8 px-2.5 py-1 rounded-full">
+          {categoryLabels[item.data.category] ?? item.data.category}
+        </span>
+        {item.data.client && (
+          <span class="font-display italic text-muted">{item.data.client}</span>
+        )}
+        <span class="text-xs font-semibold uppercase tracking-[0.16em] text-muted">{formattedDate}</span>
+      </div>
+
+      <h1 class="project-title text-ink mb-0 max-w-4xl">{item.data.title}</h1>
+      <p class="font-display italic text-muted text-lg md:text-xl mt-5 max-w-2xl">{item.data.description}</p>
+
+      {item.data.url && (
+        <div class="mt-8">
+          <AnimatedButton href={item.data.url} variant="grad" target="_blank" rel="noopener noreferrer">
+            {t('portfolio.visit')} ↗
+          </AnimatedButton>
+        </div>
+      )}
+    </div>
+  </header>
+
+  <div class="container-lg mb-14 md:mb-20">
+    <img
+      src={item.data.image}
+      alt={item.data.imageAlt || item.data.title}
+      width="1280"
+      height="800"
+      class="w-full aspect-[16/10] object-cover rounded-xl border border-border"
+    />
+  </div>
+
+  <section class="container-sm pb-14 prose-content">
+    <slot />
+  </section>
+
+  {item.data.gallery.length > 0 && (
+    <div class="container-lg pb-14 grid sm:grid-cols-2 gap-6">
+      {item.data.gallery.map((src) => (
+        <img src={src} alt="" width="800" height="500" class="w-full aspect-[16/10] object-cover rounded-xl border border-border" loading="lazy" />
+      ))}
+    </div>
+  )}
+
+  {item.data.tags.length > 0 && (
+    <div class="container-sm pb-16 flex flex-wrap gap-2">
+      {item.data.tags.map((tag) => (
+        <span class="text-xs font-medium text-accent bg-accent/8 px-2.5 py-1 rounded-full">{tag}</span>
+      ))}
+    </div>
+  )}
+
+  <nav class="border-t border-border" aria-label={t('nav.portfolio')}>
+    <div class="container-lg grid sm:grid-cols-2">
+      {prev ? (
+        <a href={`${r.portfolio}/${prev.id}`} class="proj-nav group py-9 sm:pr-10">
+          <span class="text-xs font-semibold uppercase tracking-[0.18em] text-muted">← {t('portfolio.prev')}</span>
+          <span class="proj-nav-title block mt-2 text-ink group-hover:text-accent transition-colors">{prev.data.title}</span>
+        </a>
+      ) : (
+        <div />
+      )}
+      {next && (
+        <a href={`${r.portfolio}/${next.id}`} class="proj-nav group py-9 sm:pl-10 sm:text-right sm:border-l border-border">
+          <span class="text-xs font-semibold uppercase tracking-[0.18em] text-muted">{t('portfolio.next')} →</span>
+          <span class="proj-nav-title block mt-2 text-ink group-hover:text-accent transition-colors">{next.data.title}</span>
+        </a>
+      )}
+    </div>
+  </nav>
+</article>
+
+<style>
+  .project-title {
+    font-optical-sizing: auto;
+    font-weight: 850;
+    font-size: clamp(2rem, 1.2rem + 3.6vw, 4rem);
+    line-height: 1;
+    letter-spacing: -0.015em;
+    text-transform: uppercase;
+  }
+  .proj-nav-title {
+    font-family: var(--font-family-display);
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-size: clamp(1.15rem, 1rem + 0.8vw, 1.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+  }
+</style>

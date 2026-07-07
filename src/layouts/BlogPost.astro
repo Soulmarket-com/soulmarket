@@ -1,6 +1,7 @@
 ---
 import Base from './Base.astro';
-import { getLangFromUrl, routes } from '../i18n/utils';
+import CtaBanner from '../components/sections/CtaBanner.astro';
+import { getLangFromUrl, useTranslations, routes } from '../i18n/utils';
 
 interface Props {
   title: string;
@@ -15,66 +16,74 @@ interface Props {
 
 const { title, description, pubDate, updatedDate, image, imageAlt, tags = [], lang } = Astro.props;
 const resolvedLang = lang ?? getLangFromUrl(Astro.url);
+const t = useTranslations(resolvedLang);
 const r = routes[resolvedLang];
 
-const formattedDate = new Intl.DateTimeFormat(resolvedLang === 'es' ? 'es-ES' : 'en-US', {
-  year: 'numeric', month: 'long', day: 'numeric',
-}).format(pubDate);
-
-const formattedUpdated = updatedDate
-  ? new Intl.DateTimeFormat(resolvedLang === 'es' ? 'es-ES' : 'en-US', {
-      year: 'numeric', month: 'long', day: 'numeric',
-    }).format(updatedDate)
-  : null;
+function formatDate(date: Date) {
+  return new Intl.DateTimeFormat(resolvedLang === 'es' ? 'es-ES' : 'en-US', {
+    year: 'numeric', month: 'long', day: 'numeric',
+  }).format(date);
+}
 ---
 
 <Base title={title} description={description} image={image} lang={resolvedLang} type="article">
   <article>
-    <!-- Hero -->
-    <header class="bg-ink text-white pt-28 pb-16">
-      <div class="container-sm">
-        <a href={r.blog} class="inline-flex items-center gap-1.5 text-white/50 hover:text-white text-sm mb-8 transition-colors">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-          </svg>
-          {resolvedLang === 'es' ? 'Volver al blog' : 'Back to blog'}
+    <header class="hero-columns relative overflow-hidden pt-28 md:pt-32 pb-10 md:pb-14">
+      <div class="container-md relative">
+        <a href={r.blog} class="btn-animate-y inline-block text-sm font-semibold text-muted hover:text-ink transition-colors mb-10">
+          <span class="btn-animate-y-1">← {t('blog.back')}</span>
+          <span class="btn-animate-y-2" aria-hidden="true">← {t('blog.back')}</span>
         </a>
-        {tags.length > 0 && (
-          <div class="flex flex-wrap gap-2 mb-6">
-            {tags.map(tag => (
-              <span class="text-xs font-medium bg-white/10 text-white/70 px-3 py-1 rounded-full">{tag}</span>
-            ))}
-          </div>
-        )}
-        <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight tracking-tight mb-6">
-          {title}
-        </h1>
-        <p class="text-white/60 text-lg mb-8">{description}</p>
-        <div class="flex items-center gap-2 text-white/40 text-sm">
-          <time datetime={pubDate.toISOString()}>{formattedDate}</time>
-          {formattedUpdated && (
-            <>
-              <span>·</span>
-              <span>{resolvedLang === 'es' ? 'Actualizado' : 'Updated'}: {formattedUpdated}</span>
-            </>
+
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mb-6">
+          <time class="text-xs font-semibold uppercase tracking-[0.16em] text-muted" datetime={pubDate.toISOString()}>
+            {formatDate(pubDate)}
+          </time>
+          {updatedDate && (
+            <span class="text-xs font-semibold uppercase tracking-[0.16em] text-muted">
+              · {t('blog.updated')}: {formatDate(updatedDate)}
+            </span>
           )}
+          {tags.map((tag) => (
+            <span class="text-xs font-medium text-accent bg-accent/8 px-2.5 py-1 rounded-full">{tag}</span>
+          ))}
         </div>
+
+        <h1 class="post-title text-ink mb-0">{title}</h1>
+        <p class="font-display italic text-muted text-lg md:text-xl mt-5 max-w-2xl">{description}</p>
       </div>
     </header>
 
     {image && (
-      <div class="container-md -mt-8 mb-12">
+      <div class="container-md mb-12 md:mb-16">
         <img
           src={image}
           alt={imageAlt || title}
-          class="w-full aspect-video object-cover rounded-2xl shadow-xl"
+          width="1024"
+          height="576"
+          class="w-full aspect-video object-cover rounded-xl border border-border"
         />
       </div>
     )}
 
-    <!-- Content -->
-    <div class="container-sm py-12 prose-content">
+    <div class="container-sm pb-16 md:pb-20 prose-content">
       <slot />
     </div>
   </article>
+
+  <CtaBanner lang={resolvedLang} />
 </Base>
+
+<style>
+  /* Titular de artículo: serif grande en caja normal (los títulos largos
+     de blog no funcionan en caja alta) */
+  .post-title {
+    font-family: var(--font-family-display);
+    font-optical-sizing: auto;
+    font-weight: 640;
+    font-size: clamp(2rem, 1.3rem + 3vw, 3.5rem);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+</style>

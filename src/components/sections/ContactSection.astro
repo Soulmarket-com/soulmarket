@@ -1,0 +1,184 @@
+---
+import { useTranslations, routes } from '../../i18n/utils';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const r = routes[lang];
+---
+
+<section class="hero-columns relative overflow-hidden pt-28 md:pt-36 pb-16 md:pb-24">
+  <div class="container-lg relative">
+    <div class="grid lg:grid-cols-[1fr_1.1fr] gap-14 lg:gap-24 items-start">
+      <div>
+        <h1 class="reveal fadeInUp giant-heading text-ink mb-0">
+          <em class="block">{t('contact.giant.italic')}</em>
+          <span class="block">{t('contact.giant.main')}</span>
+        </h1>
+        <p class="reveal fadeInUp section-descr max-w-md mt-7" style="--reveal-delay:0.1s">
+          {t('contact.subtitle')}
+        </p>
+
+        <div class="reveal fadeInUp mt-12" style="--reveal-delay:0.2s">
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-muted mb-2">{t('contact.direct')}</p>
+          <a href="mailto:hola@soulmarket.com" class="font-display italic text-2xl md:text-3xl text-ink hover:text-accent transition-colors">
+            hola@soulmarket.com
+          </a>
+        </div>
+
+        <p class="reveal fadeInUp mt-9 flex items-center gap-2.5 text-sm text-muted" style="--reveal-delay:0.3s">
+          <svg class="w-5 h-5 shrink-0" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+            <path
+              d="M50 32 C 44 16, 22 12, 14 26 C 6 40, 16 56, 30 68 C 38 75, 46 82, 50 88 C 54 81, 63 74, 71 66 C 84 54, 94 39, 85 26 C 76 13, 55 17, 50 32 Z"
+              stroke="var(--color-accent)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"
+            />
+          </svg>
+          {t('contact.response')}
+        </p>
+      </div>
+
+      <!-- El fetch apunta a LEAD_ENDPOINT (proxy del VPS → Lead Capture de EspoCRM).
+           Hasta que el CRM esté vivo, el error remite al email directo. -->
+      <form
+        id="contact-form"
+        class="reveal fadeInUp lg:pt-4"
+        style="--reveal-delay:0.15s"
+        data-lang={lang}
+        data-sending={t('contact.sending')}
+        data-success={t('contact.success')}
+        data-error={t('contact.error')}
+      >
+        <div class="grid sm:grid-cols-2 gap-x-8">
+          <div class="field">
+            <label for="name" class="field-label">{t('contact.name')}</label>
+            <input type="text" id="name" name="name" required autocomplete="name" class="field-input" />
+          </div>
+          <div class="field">
+            <label for="email" class="field-label">{t('contact.email')}</label>
+            <input type="email" id="email" name="email" required autocomplete="email" class="field-input" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="message" class="field-label">{t('contact.message')}</label>
+          <textarea id="message" name="message" rows="5" required class="field-input resize-none"></textarea>
+        </div>
+
+        <!-- Honeypot anti-spam: invisible para personas, irresistible para bots -->
+        <div class="hp" aria-hidden="true">
+          <label for="website">Website</label>
+          <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <label class="mt-7 flex items-start gap-3 text-sm text-muted cursor-pointer">
+          <input type="checkbox" name="privacy" required class="mt-0.5 w-4 h-4 shrink-0 accent-[var(--color-accent)]" />
+          <span>
+            {`${t('contact.privacy.label')} `}<a href={r.privacy} class="underline underline-offset-2 text-ink hover:text-accent transition-colors">{t('contact.privacy.link')}</a>
+          </span>
+        </label>
+
+        <p class="form-feedback hidden mt-6 text-sm font-medium" aria-live="polite"></p>
+
+        <button type="submit" class="btn-mod btn-grad btn-large w-full justify-center mt-8">
+          {t('contact.send')}
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<style>
+  .field {
+    margin-top: 1.75rem;
+  }
+  .field-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--color-muted);
+    margin-bottom: 0.35rem;
+  }
+  .field-input {
+    width: 100%;
+    padding: 0.65rem 0;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--color-border);
+    border-radius: 0;
+    font-size: 1.05rem;
+    color: var(--color-ink);
+    transition: border-color 0.25s var(--ease-default);
+  }
+  .field-input:focus,
+  .field-input:focus-visible {
+    outline: none;
+    border-bottom-color: var(--color-accent);
+    box-shadow: 0 1px 0 0 var(--color-accent);
+  }
+
+  .hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .form-feedback.is-ok { color: var(--color-ink); }
+  .form-feedback.is-error { color: var(--color-accent-dark); }
+</style>
+
+<script>
+  // Proxy en el VPS que reenvía al Lead Capture del CRM (ver tarea #1).
+  const LEAD_ENDPOINT = '/api/lead';
+
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+
+  if (form) {
+    const feedback = form.querySelector<HTMLElement>('.form-feedback')!;
+    const btn = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    const idleLabel = btn.textContent;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+
+      // Si el honeypot viene relleno es un bot: fingir éxito y no enviar nada
+      if (String(data.get('website') ?? '').length > 0) {
+        form.reset();
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = form.dataset.sending ?? '…';
+
+      try {
+        const res = await fetch(LEAD_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            name: data.get('name'),
+            email: data.get('email'),
+            message: data.get('message'),
+            lang: form.dataset.lang,
+            source: location.pathname,
+          }),
+        });
+        if (!res.ok) throw new Error(String(res.status));
+        feedback.className = 'form-feedback is-ok mt-6 text-sm font-medium';
+        feedback.textContent = form.dataset.success ?? '';
+        form.reset();
+      } catch {
+        feedback.className = 'form-feedback is-error mt-6 text-sm font-medium';
+        feedback.textContent = form.dataset.error ?? '';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = idleLabel;
+      }
+    });
+  }
+</script>

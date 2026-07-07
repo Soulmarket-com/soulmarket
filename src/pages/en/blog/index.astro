@@ -1,66 +1,36 @@
 ---
 import Base from '../../../layouts/Base.astro';
+import BlogRows from '../../../components/sections/BlogRows.astro';
+import CtaBanner from '../../../components/sections/CtaBanner.astro';
 import { getCollection } from 'astro:content';
-import { useTranslations, routes } from '../../../i18n/utils';
+import { useTranslations } from '../../../i18n/utils';
 
 const lang = 'en';
 const t = useTranslations(lang);
-const r = routes[lang];
 
 const allPosts = await getCollection('blog', ({ data }) => data.lang === lang && !data.draft);
 const posts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-
-function formatDate(date: Date) {
-  return new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).format(date);
-}
 ---
 
 <Base
-  title="Blog — Web design and digital marketing resources"
+  title="Web design and digital marketing blog"
   description="Articles, guides and resources on web design, SEO, photography and digital marketing for freelancers and small businesses."
-  lang="en"
+  lang={lang}
 >
-  <header class="bg-ink text-white pt-28 pb-16">
-    <div class="container-lg">
-      <span class="text-accent-light text-xs font-semibold uppercase tracking-widest">{t('blog.eyebrow')}</span>
-      <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold mt-3 tracking-tight">{t('blog.title')}</h1>
+  <header class="hero-columns relative overflow-hidden pt-28 md:pt-36 pb-8 md:pb-12">
+    <div class="container-lg relative">
+      <h1 class="reveal fadeInUp giant-heading text-ink mb-0">
+        <em class="block">{t('blog.page.italic')}</em>
+        <span class="block">{t('blog.page.main')}</span>
+      </h1>
     </div>
   </header>
 
-  <section class="section-gap">
+  <section class="pb-20 md:pb-28">
     <div class="container-lg">
-      {posts.length === 0 ? (
-        <p class="text-center text-muted py-20">{t('blog.empty')}</p>
-      ) : (
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {posts.map((post) => (
-            <a href={`/en/blog/${post.id}`} class="group block rounded-2xl overflow-hidden border border-border hover:shadow-lg hover:border-transparent transition-all duration-300">
-              {post.data.image && (
-                <div class="aspect-video overflow-hidden">
-                  <img src={post.data.image} alt={post.data.imageAlt || post.data.title}
-                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-                </div>
-              )}
-              <div class="p-6">
-                {post.data.tags.length > 0 && (
-                  <div class="flex flex-wrap gap-1.5 mb-3">
-                    {post.data.tags.slice(0, 2).map(tag => (
-                      <span class="text-xs text-accent bg-accent/8 px-2.5 py-0.5 rounded-full font-medium">{tag}</span>
-                    ))}
-                  </div>
-                )}
-                <h2 class="font-bold text-ink text-lg leading-snug mb-2 group-hover:text-accent transition-colors">
-                  {post.data.title}
-                </h2>
-                <p class="text-sm text-muted leading-relaxed line-clamp-2 mb-4">{post.data.description}</p>
-                <time class="text-xs text-muted" datetime={post.data.pubDate.toISOString()}>
-                  {formatDate(post.data.pubDate)}
-                </time>
-              </div>
-            </a>
-          ))}
-        </div>
-      )}
+      <BlogRows lang={lang} posts={posts} />
     </div>
   </section>
+
+  <CtaBanner lang={lang} />
 </Base>

@@ -1,122 +1,20 @@
 ---
 import Base from '../../layouts/Base.astro';
+import PortfolioIndex from '../../components/sections/PortfolioIndex.astro';
 import CtaBanner from '../../components/sections/CtaBanner.astro';
 import { getCollection } from 'astro:content';
-import { useTranslations } from '../../i18n/utils';
 
 const lang = 'es';
-const t = useTranslations(lang);
 
 const allItems = await getCollection('portfolio', ({ data }) => data.lang === lang);
 const items = allItems.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-
-const categories = [
-  { id: 'all', label: t('portfolio.filter.all') },
-  { id: 'web', label: t('portfolio.filter.web') },
-  { id: 'design', label: t('portfolio.filter.design') },
-  { id: 'photo-video', label: t('portfolio.filter.media') },
-  { id: 'marketing', label: t('portfolio.filter.marketing') },
-];
-
-const categoryMap: Record<string, string> = {
-  web: t('portfolio.filter.web'),
-  design: t('portfolio.filter.design'),
-  'photo-video': t('portfolio.filter.media'),
-  marketing: t('portfolio.filter.marketing'),
-};
 ---
 
 <Base
   title="Portfolio de diseño web y proyectos digitales"
   description="Proyectos de diseño web, branding, fotografía y marketing digital. Trabajos reales con resultados reales."
-  lang="es"
+  lang={lang}
 >
-  <header class="bg-ink text-white pt-28 pb-16">
-    <div class="container-lg">
-      <span class="text-accent-light text-xs font-semibold uppercase tracking-widest">{t('portfolio.eyebrow')}</span>
-      <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold mt-3 tracking-tight">{t('portfolio.title')}</h1>
-    </div>
-  </header>
-
-  <section class="section-gap">
-    <div class="container-lg">
-      <!-- Filter tabs -->
-      <div class="flex flex-wrap gap-2 mb-12" id="filter-container">
-        {categories.map(({ id, label }) => (
-          <button
-            data-filter={id}
-            class:list={[
-              'filter-btn px-4 py-2 rounded-full text-sm font-medium transition-colors',
-              id === 'all'
-                ? 'bg-ink text-white'
-                : 'bg-surface text-muted hover:bg-border',
-            ]}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-
-      {items.length === 0 ? (
-        <p class="text-center text-muted py-20">{t('portfolio.empty')}</p>
-      ) : (
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="portfolio-grid">
-          {items.map((item) => (
-            <a
-              href={`/portfolio/${item.id}`}
-              data-category={item.data.category}
-              class="portfolio-item group block rounded-2xl overflow-hidden border border-border hover:border-transparent hover:shadow-xl transition-all duration-300"
-            >
-              <div class="aspect-[4/3] bg-surface overflow-hidden">
-                <img
-                  src={item.data.image}
-                  alt={item.data.imageAlt || item.data.title}
-                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  loading="lazy"
-                />
-              </div>
-              <div class="p-5">
-                <div class="flex items-center justify-between mb-2">
-                  <span class="text-xs font-medium text-accent bg-accent/8 px-2.5 py-1 rounded-full">
-                    {categoryMap[item.data.category]}
-                  </span>
-                  {item.data.client && (
-                    <span class="text-xs text-muted">{item.data.client}</span>
-                  )}
-                </div>
-                <h2 class="font-bold text-ink text-base leading-snug">{item.data.title}</h2>
-                <p class="text-sm text-muted mt-1.5 line-clamp-2">{item.data.description}</p>
-                <span class="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-accent group-hover:gap-2 transition-all">
-                  {t('portfolio.viewProject')} →
-                </span>
-              </div>
-            </a>
-          ))}
-        </div>
-      )}
-    </div>
-  </section>
-
+  <PortfolioIndex lang={lang} items={items} />
   <CtaBanner lang={lang} />
 </Base>
-
-<script>
-  const btns = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
-  const items = document.querySelectorAll<HTMLElement>('.portfolio-item');
-
-  btns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const filter = btn.dataset.filter;
-
-      btns.forEach(b => b.classList.replace('bg-ink', 'bg-surface'));
-      btns.forEach(b => b.classList.replace('text-white', 'text-muted'));
-      btn.classList.replace('bg-surface', 'bg-ink');
-      btn.classList.replace('text-muted', 'text-white');
-
-      items.forEach(item => {
-        const show = filter === 'all' || item.dataset.category === filter;
-        item.style.display = show ? '' : 'none';
-      });
-    });
-  });
-</script>
