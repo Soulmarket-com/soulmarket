@@ -1,0 +1,93 @@
+---
+import Base from '../../layouts/Base.astro';
+import { routes } from '../../i18n/utils';
+
+const lang = 'en';
+const r = routes[lang];
+const updated = 'July 7, 2026';
+---
+
+<Base
+  title="Privacy policy"
+  description="Soulmarket's privacy policy: what data we collect through the contact form, why we collect it and how to exercise your rights."
+  lang={lang}
+>
+  <header class="hero-columns relative overflow-hidden pt-28 md:pt-36 pb-8 md:pb-12">
+    <div class="container-lg relative">
+      <h1 class="reveal fadeInUp giant-heading text-ink mb-0">
+        <em class="block">privacy</em>
+        <span class="block">policy</span>
+      </h1>
+      <p class="reveal fadeInUp text-xs font-semibold uppercase tracking-[0.2em] text-muted mt-6" style="--reveal-delay:0.1s">
+        Last updated: {updated}
+      </p>
+    </div>
+  </header>
+
+  <section class="container-sm pb-20 md:pb-28 prose-content">
+    <h2>1. Data controller</h2>
+    <p>
+      The controller of the personal data collected on soulmarket.com is
+      <strong>Soulmarket</strong> <!-- TODO: add legal name, tax ID and postal address before launch -->
+      ("Soulmarket"). You can reach us at
+      <a href="mailto:hola@soulmarket.com">hola@soulmarket.com</a>.
+    </p>
+
+    <h2>2. What data we collect and why</h2>
+    <p>
+      Through the <a href={r.contact}>contact form</a> we collect your name, email address and the
+      content of your message, for the sole purpose of replying to your enquiry and, if you request
+      it, preparing a commercial proposal.
+    </p>
+    <p>
+      We do not use this data to send unsolicited advertising, nor do we add it to mailing lists
+      without your express consent.
+    </p>
+
+    <h2>3. Legal basis</h2>
+    <p>
+      The legal basis for processing is your <strong>consent</strong>, given by ticking the
+      acceptance checkbox before submitting the form (art. 6.1.a GDPR), and our legitimate interest
+      in replying to commercial enquiries (art. 6.1.f GDPR).
+    </p>
+
+    <h2>4. Where your data is stored</h2>
+    <p>
+      Data is stored in our own management system, hosted on a server contracted with OVH within
+      the European Union. No international transfers outside the European Economic Area take place.
+    </p>
+
+    <h2>5. Recipients</h2>
+    <p>
+      We do not share your data with third parties except where legally required. We do not use
+      external form platforms: messages go directly to our systems.
+    </p>
+
+    <h2>6. Retention</h2>
+    <p>
+      We keep your data for the duration of the commercial relationship or, for enquiries that do
+      not lead to a project, for a maximum of two years after the last contact, after which it is
+      deleted.
+    </p>
+
+    <h2>7. Your rights</h2>
+    <p>
+      You may exercise your rights of access, rectification, erasure, objection, restriction of
+      processing and portability at any time by writing to
+      <a href="mailto:hola@soulmarket.com">hola@soulmarket.com</a>. You also have the right to file
+      a complaint with the <a href="https://www.aepd.es" target="_blank" rel="noopener noreferrer">Spanish Data Protection Agency (AEPD)</a>.
+    </p>
+
+    <h2>8. Cookies</h2>
+    <p>
+      This website does not use tracking or advertising cookies. The only cookies or local storage
+      that may exist are those strictly necessary for the site to work. If we add analytics in the
+      future, this policy will be updated and consent requested where required.
+    </p>
+
+    <h2>9. Changes to this policy</h2>
+    <p>
+      Any relevant change to this policy will be published on this page with its update date.
+    </p>
+  </section>
+</Base>

@@ -2,7 +2,7 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { getLangFromUrl, useTranslations, withBase } from '../i18n/utils';
+import { getLangFromUrl, useTranslations, withBase, translatePath } from '../i18n/utils';
 
 interface Props {
   title: string;
@@ -13,21 +13,30 @@ interface Props {
   noindex?: boolean;
 }
 
-const { title, description, image = '/og-default.jpg', lang, type = 'website', noindex = false } = Astro.props;
+const { title, description, image = '/og-default.png', lang, type = 'website', noindex = false } = Astro.props;
 
 const resolvedLang = lang ?? getLangFromUrl(Astro.url);
 const t = useTranslations(resolvedLang);
 const siteUrl = 'https://soulmarket.com';
-const canonical = new URL(Astro.url.pathname, siteUrl).href;
+
+// Canonical y hreflang apuntan SIEMPRE a producción: si el build lleva base
+// (preview de GitHub Pages) se retira del pathname y se añade noindex.
+const basePrefix = import.meta.env.BASE_URL.replace(/\/+$/, '');
+const isPreview = basePrefix !== '';
+const sitePath = isPreview && Astro.url.pathname.startsWith(basePrefix)
+  ? Astro.url.pathname.slice(basePrefix.length) || '/'
+  : Astro.url.pathname;
+
+const canonical = new URL(sitePath, siteUrl).href;
 const ogImage = image.startsWith('http') ? image : new URL(image, siteUrl).href;
 const fullTitle = title.includes('Soulmarket') ? title : `${title} | Soulmarket`;
 
-const esPath = Astro.url.pathname.startsWith('/en')
-  ? Astro.url.pathname.replace(/^\/en/, '') || '/'
-  : Astro.url.pathname;
-const enPath = Astro.url.pathname.startsWith('/en')
-  ? Astro.url.pathname
-  : `/en${Astro.url.pathname}`;
+// Solo se emiten alternates cuando existe la página equivalente traducida;
+// en detalles de blog/portfolio (slugs distintos por idioma) se omiten.
+const stripBase = (p: string | null) =>
+  p === null ? null : (isPreview && p.startsWith(basePrefix) ? p.slice(basePrefix.length) || '/' : p);
+const esPath = stripBase(translatePath(Astro.url.pathname, 'es'));
+const enPath = stripBase(translatePath(Astro.url.pathname, 'en'));
 
 const schema = JSON.stringify({
   '@context': 'https://schema.org',
@@ -60,7 +69,7 @@ const schema = JSON.stringify({
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    {(noindex || isPreview) && <meta name="robots" content="noindex, nofollow" />}
 
     <meta property="og:type" content={type} />
     <meta property="og:title" content={fullTitle} />
@@ -75,9 +84,13 @@ const schema = JSON.stringify({
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
 
-    <link rel="alternate" hreflang="es" href={`${siteUrl}${esPath}`} />
-    <link rel="alternate" hreflang="en" href={`${siteUrl}${enPath}`} />
-    <link rel="alternate" hreflang="x-default" href={`${siteUrl}${esPath}`} />
+    {esPath && enPath && (
+      <>
+        <link rel="alternate" hreflang="es" href={`${siteUrl}${esPath}`} />
+        <link rel="alternate" hreflang="en" href={`${siteUrl}${enPath}`} />
+        <link rel="alternate" hreflang="x-default" href={`${siteUrl}${esPath}`} />
+      </>
+    )}
 
     <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
     <link rel="icon" href={withBase('/favicon.ico')} sizes="any" />

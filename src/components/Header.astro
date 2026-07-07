@@ -1,5 +1,5 @@
 ---
-import { useTranslations, routes } from '../i18n/utils';
+import { useTranslations, routes, translatePath } from '../i18n/utils';
 import AnimatedButton from './ui/AnimatedButton.astro';
 
 interface Props {
@@ -10,7 +10,8 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 const r = routes[lang];
 const otherLang = lang === 'es' ? 'en' : 'es';
-const otherLangUrl = routes[otherLang].home;
+// A la página equivalente si existe; a la home del otro idioma si no
+const otherLangUrl = translatePath(Astro.url.pathname, otherLang) ?? routes[otherLang].home;
 
 const navItems = [
   { label: t('nav.home'), href: r.home },

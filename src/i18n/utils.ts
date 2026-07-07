@@ -44,3 +44,17 @@ export const routes = {
 } as const;
 
 export type Routes = typeof routes[Lang];
+
+// Devuelve la ruta equivalente en el otro idioma (con base incluida), o null
+// si no hay correspondencia conocida (detalles de blog/portfolio, cuyos slugs
+// difieren por idioma). Lo usan el hreflang de Base y el selector de idioma.
+export function translatePath(path: string, to: Lang): string | null {
+  const norm = (p: string) => (p.length > 1 ? p.replace(/\/+$/, '') : p);
+  const target = norm(path);
+  for (const lang of Object.keys(routes) as Lang[]) {
+    for (const [key, value] of Object.entries(routes[lang])) {
+      if (norm(value) === target) return routes[to][key as keyof Routes];
+    }
+  }
+  return null;
+}

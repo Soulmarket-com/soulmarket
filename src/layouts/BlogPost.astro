@@ -24,9 +24,25 @@ function formatDate(date: Date) {
     year: 'numeric', month: 'long', day: 'numeric',
   }).format(date);
 }
+
+const siteUrl = 'https://soulmarket.com';
+const articleSchema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description,
+  inLanguage: resolvedLang === 'es' ? 'es-ES' : 'en-US',
+  datePublished: pubDate.toISOString(),
+  ...(updatedDate && { dateModified: updatedDate.toISOString() }),
+  ...(image && { image: image.startsWith('http') ? image : new URL(image, siteUrl).href }),
+  author: { '@type': 'Organization', name: 'Soulmarket', url: siteUrl },
+  publisher: { '@type': 'Organization', name: 'Soulmarket', url: siteUrl },
+  keywords: tags.join(', '),
+});
 ---
 
 <Base title={title} description={description} image={image} lang={resolvedLang} type="article">
+  <script type="application/ld+json" set:html={articleSchema} />
   <article>
     <header class="hero-columns relative overflow-hidden pt-28 md:pt-32 pb-10 md:pb-14">
       <div class="container-md relative">

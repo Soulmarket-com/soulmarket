@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..600&family=Instrument+Sans:wght@400..700&display=block" rel="stylesheet">
+<style>
+  * { margin: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    position: relative;
+    background: #faf6ef;
+    font-family: 'Fraunces', Georgia, serif;
+    color: #1a1714;
+    padding: 56px 72px;
+  }
+  /* Retícula de columnas */
+  .grid {
+    position: absolute; inset: 0;
+    background-image: linear-gradient(90deg, #e6dccb 1px, transparent 1px);
+    background-size: calc(100% / 8) 100%;
+    opacity: 0.55;
+  }
+  .logo {
+    position: relative;
+    font-weight: 600;
+    font-size: 34px;
+    letter-spacing: -0.01em;
+  }
+  .logo .dot { color: #e8542f; }
+  .title {
+    position: relative;
+    margin-top: 84px;
+    font-optical-sizing: auto;
+    font-weight: 850;
+    font-size: 148px;
+    line-height: 0.92;
+    letter-spacing: -0.025em;
+    text-transform: uppercase;
+  }
+  .title em {
+    font-style: italic;
+    font-weight: 460;
+    font-size: 0.6em;
+    text-transform: lowercase;
+    letter-spacing: -0.02em;
+    color: #e8542f;
+  }
+  .title .l2 { margin-left: 110px; display: block; }
+  .tagline {
+    position: absolute;
+    left: 72px; bottom: 56px;
+    font-family: 'Instrument Sans', sans-serif;
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #6e6659;
+  }
+  .heart {
+    position: absolute;
+    right: -40px; top: 120px;
+    width: 460px; height: 460px;
+  }
+</style>
+</head>
+<body>
+  <div class="grid"></div>
+  <svg class="heart" viewBox="0 0 100 100" fill="none">
+    <path d="M50 32 C 44 16, 22 12, 14 26 C 6 40, 16 56, 30 68 C 38 75, 46 82, 50 88 C 54 81, 63 74, 71 66 C 84 54, 94 39, 85 26 C 76 13, 55 17, 50 32 Z"
+      stroke="#dcd2bf" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M40 61 c 6 5.5, 14 5.5, 20 -0.5" stroke="#dcd2bf" stroke-width="2.6" stroke-linecap="round" />
+    <path d="M39 46 c 0.5 2.5, 0.5 4, 0 6.5 M61 46 c 0.5 2.5, 0.5 4, 0 6.5" stroke="#dcd2bf" stroke-width="2.6" stroke-linecap="round" />
+  </svg>
+  <div class="logo">soulmarket<span class="dot">.</span></div>
+  <div class="title">
+    DISEÑO<em> web</em>
+    <span class="l2">CON ALMA</span>
+  </div>
+  <div class="tagline">web · marca · contenido — soulmarket.com</div>
+</body>
+</html>

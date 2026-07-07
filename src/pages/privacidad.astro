@@ -1,0 +1,96 @@
+---
+import Base from '../layouts/Base.astro';
+import { routes } from '../i18n/utils';
+
+const lang = 'es';
+const r = routes[lang];
+const updated = '7 de julio de 2026';
+---
+
+<Base
+  title="Política de privacidad"
+  description="Política de privacidad de Soulmarket: qué datos recogemos a través del formulario de contacto, con qué finalidad y cómo ejercer tus derechos."
+  lang={lang}
+>
+  <header class="hero-columns relative overflow-hidden pt-28 md:pt-36 pb-8 md:pb-12">
+    <div class="container-lg relative">
+      <h1 class="reveal fadeInUp giant-heading text-ink mb-0">
+        <em class="block">política de</em>
+        <span class="block">privacidad</span>
+      </h1>
+      <p class="reveal fadeInUp text-xs font-semibold uppercase tracking-[0.2em] text-muted mt-6" style="--reveal-delay:0.1s">
+        Última actualización: {updated}
+      </p>
+    </div>
+  </header>
+
+  <section class="container-sm pb-20 md:pb-28 prose-content">
+    <h2>1. Responsable del tratamiento</h2>
+    <p>
+      El responsable del tratamiento de los datos personales recogidos en soulmarket.com es
+      <strong>Soulmarket</strong> <!-- TODO: completar razón social, NIF y dirección postal antes de publicar -->
+      (en adelante, «Soulmarket»). Puedes contactar con nosotros en
+      <a href="mailto:hola@soulmarket.com">hola@soulmarket.com</a>.
+    </p>
+
+    <h2>2. Qué datos recogemos y con qué finalidad</h2>
+    <p>
+      A través del <a href={r.contact}>formulario de contacto</a> recogemos tu nombre, tu dirección
+      de correo electrónico y el contenido de tu mensaje, con la única finalidad de responder a tu
+      consulta y, si nos lo pides, prepararte una propuesta comercial.
+    </p>
+    <p>
+      No utilizamos estos datos para enviarte publicidad no solicitada ni los incorporamos a listas
+      de correo sin tu consentimiento expreso.
+    </p>
+
+    <h2>3. Legitimación</h2>
+    <p>
+      La base legal del tratamiento es tu <strong>consentimiento</strong>, que otorgas al marcar la
+      casilla de aceptación de esta política antes de enviar el formulario (art. 6.1.a RGPD), y
+      nuestro interés legítimo en responder a las consultas comerciales recibidas (art. 6.1.f RGPD).
+    </p>
+
+    <h2>4. Dónde se almacenan tus datos</h2>
+    <p>
+      Los datos se almacenan en nuestro propio sistema de gestión, alojado en un servidor contratado
+      con OVH en la Unión Europea. No se realizan transferencias internacionales de datos fuera del
+      Espacio Económico Europeo.
+    </p>
+
+    <h2>5. Destinatarios</h2>
+    <p>
+      No cedemos tus datos a terceros, salvo obligación legal. No trabajamos con plataformas
+      externas de gestión de formularios: los mensajes llegan directamente a nuestros sistemas.
+    </p>
+
+    <h2>6. Conservación</h2>
+    <p>
+      Conservaremos tus datos mientras dure la relación comercial o, en el caso de consultas que no
+      deriven en proyecto, durante un máximo de dos años desde el último contacto, tras lo cual
+      serán eliminados.
+    </p>
+
+    <h2>7. Tus derechos</h2>
+    <p>
+      Puedes ejercer en cualquier momento tus derechos de acceso, rectificación, supresión,
+      oposición, limitación del tratamiento y portabilidad escribiendo a
+      <a href="mailto:hola@soulmarket.com">hola@soulmarket.com</a>. También tienes derecho a
+      presentar una reclamación ante la <a href="https://www.aepd.es" target="_blank" rel="noopener noreferrer">Agencia Española de Protección de Datos</a>.
+    </p>
+
+    <h2>8. Cookies</h2>
+    <p>
+      Esta web no utiliza cookies de seguimiento ni de publicidad. Las únicas cookies o
+      almacenamiento local que pueden existir son las estrictamente técnicas necesarias para el
+      funcionamiento del sitio. Si en el futuro incorporamos analítica, esta política se actualizará
+      y, de ser necesario, se solicitará tu consentimiento.
+    </p>
+
+    <h2>9. Cambios en esta política</h2>
+    <p>
+      Cualquier cambio relevante en esta política se publicará en esta misma página con su fecha de
+      actualización.
+    </p>
+  </section>
+</Base>
