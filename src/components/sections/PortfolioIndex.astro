@@ -57,7 +57,7 @@ const filters = [
       <p class="text-center text-muted py-20">{t('portfolio.empty')}</p>
     ) : (
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-14" id="portfolio-grid">
-        {items.map((item) => (
+        {items.map((item, i) => (
           <a
             href={`${r.portfolio}/${item.id}`}
             data-category={item.data.category}
@@ -70,7 +70,8 @@ const filters = [
                 width="800"
                 height="500"
                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                loading="lazy"
+                loading={i < 2 ? 'eager' : 'lazy'}
+                decoding="async"
               />
             </div>
             <div class="pt-5 flex items-start justify-between gap-4">
@@ -164,6 +165,10 @@ const filters = [
         card.classList.toggle('is-hidden', !show);
         card.classList.remove('card-in');
         if (show) {
+          // Las imágenes lazy ocultas por el filtro nunca cargan: al mostrar
+          // la tarjeta se fuerza la carga inmediata
+          const img = card.querySelector<HTMLImageElement>('img[loading="lazy"]');
+          if (img) img.loading = 'eager';
           // Reinicia la animación de entrada en cada filtrado
           void card.offsetWidth;
           card.classList.add('card-in');
