@@ -1,5 +1,5 @@
 ---
-import { useTranslations, routes } from '../../i18n/utils';
+import { useTranslations, routes, withBase } from '../../i18n/utils';
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
@@ -58,7 +58,7 @@ const categoryLabels: Record<string, string> = {
           >
             <div class="aspect-[16/10] bg-surface overflow-hidden rounded-xl border border-border">
               <img
-                src={item.data.image}
+                src={withBase(item.data.image)}
                 alt={item.data.imageAlt || item.data.title}
                 width="800"
                 height="500"

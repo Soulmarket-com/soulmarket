@@ -1,5 +1,5 @@
 ---
-import { useTranslations, routes } from '../../i18n/utils';
+import { useTranslations, routes, withBase } from '../../i18n/utils';
 import AnimatedButton from '../ui/AnimatedButton.astro';
 import type { CollectionEntry } from 'astro:content';
 
@@ -59,7 +59,7 @@ const categoryLabels: Record<string, string> = {
 
   <div class="container-lg mb-14 md:mb-20">
     <img
-      src={item.data.image}
+      src={withBase(item.data.image)}
       alt={item.data.imageAlt || item.data.title}
       width="1280"
       height="800"
@@ -74,7 +74,7 @@ const categoryLabels: Record<string, string> = {
   {item.data.gallery.length > 0 && (
     <div class="container-lg pb-14 grid sm:grid-cols-2 gap-6">
       {item.data.gallery.map((src) => (
-        <img src={src} alt="" width="800" height="500" class="w-full aspect-[16/10] object-cover rounded-xl border border-border" loading="lazy" />
+        <img src={withBase(src)} alt="" width="800" height="500" class="w-full aspect-[16/10] object-cover rounded-xl border border-border" loading="lazy" />
       ))}
     </div>
   )}

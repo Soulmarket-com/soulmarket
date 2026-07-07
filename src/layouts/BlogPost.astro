@@ -1,7 +1,7 @@
 ---
 import Base from './Base.astro';
 import CtaBanner from '../components/sections/CtaBanner.astro';
-import { getLangFromUrl, useTranslations, routes } from '../i18n/utils';
+import { getLangFromUrl, useTranslations, routes, withBase } from '../i18n/utils';
 
 interface Props {
   title: string;
@@ -57,7 +57,7 @@ function formatDate(date: Date) {
     {image && (
       <div class="container-md mb-12 md:mb-16">
         <img
-          src={image}
+          src={withBase(image)}
           alt={imageAlt || title}
           width="1024"
           height="576"

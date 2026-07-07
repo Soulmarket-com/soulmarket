@@ -14,24 +14,32 @@ export function useTranslations(lang: Lang) {
   };
 }
 
+// Antepone la base de despliegue (p. ej. /soulmarket en la preview de GitHub
+// Pages) a una ruta absoluta interna. Las URLs externas pasan sin tocar.
+export function withBase(path: string): string {
+  if (/^https?:\/\//.test(path)) return path;
+  const base = import.meta.env.BASE_URL.replace(/\/+$/, '');
+  return `${base}${path}`;
+}
+
 export const routes = {
   es: {
-    home: '/',
-    services: '/servicios',
-    portfolio: '/portfolio',
-    blog: '/blog',
-    about: '/sobre-mi',
-    contact: '/contacto',
-    privacy: '/privacidad',
+    home: withBase('/'),
+    services: withBase('/servicios'),
+    portfolio: withBase('/portfolio'),
+    blog: withBase('/blog'),
+    about: withBase('/sobre-mi'),
+    contact: withBase('/contacto'),
+    privacy: withBase('/privacidad'),
   },
   en: {
-    home: '/en/',
-    services: '/en/services',
-    portfolio: '/en/portfolio',
-    blog: '/en/blog',
-    about: '/en/about',
-    contact: '/en/contact',
-    privacy: '/en/privacy',
+    home: withBase('/en/'),
+    services: withBase('/en/services'),
+    portfolio: withBase('/en/portfolio'),
+    blog: withBase('/en/blog'),
+    about: withBase('/en/about'),
+    contact: withBase('/en/contact'),
+    privacy: withBase('/en/privacy'),
   },
 } as const;
 

@@ -10,7 +10,7 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 const r = routes[lang];
 const otherLang = lang === 'es' ? 'en' : 'es';
-const otherLangUrl = lang === 'es' ? '/en/' : '/';
+const otherLangUrl = routes[otherLang].home;
 
 const navItems = [
   { label: t('nav.home'), href: r.home },
