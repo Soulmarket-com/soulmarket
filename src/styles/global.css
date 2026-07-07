@@ -87,6 +87,11 @@
   html {
     scroll-behavior: smooth;
   }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
 
   /* Anchored targets clear the 64px fixed header */
   [id] {
@@ -103,6 +108,12 @@
     -moz-osx-font-smoothing: grayscale;
     color: var(--color-ink);
     background-color: var(--color-paper);
+  }
+
+  /* Red de seguridad: los titulares gigantes y marquees nunca deben provocar
+     scroll horizontal (clip no crea contenedor de scroll, a diferencia de hidden) */
+  html, body {
+    overflow-x: clip;
   }
 
   ::selection {
@@ -264,7 +275,8 @@
     display: block;
     font-optical-sizing: auto;
     font-weight: 850;
-    font-size: clamp(2.75rem, 1.25rem + 7vw, 6.5rem);
+    /* Suelo bajo para que palabras largas (SELECCIONADOS) quepan en 320-400px */
+    font-size: clamp(2rem, 0.9rem + 6.4vw, 6.5rem);
     line-height: 0.95;
     letter-spacing: -0.02em;
     text-transform: uppercase;

@@ -19,18 +19,19 @@ const categoryLabels: Record<string, string> = {
 };
 ---
 
-<section class="section-gap-lg">
+<section class="section-gap-lg" id="portfolio-home">
   <div class="container-lg">
-    <div class="flex items-end justify-between gap-6 mb-14 md:mb-20">
+    <div class="relative flex flex-wrap items-end justify-between gap-6 mb-14 md:mb-20">
       <h2 class="reveal fadeInUp giant-heading text-ink mb-0">
         <em class="block">{t('portfolio.giant.italic')}</em>
         <span class="block">{t('portfolio.giant.main')}</span>
       </h2>
 
-      <!-- Sello giratorio, enlace a todo el portfolio -->
+      <!-- Sello giratorio, enlace a todo el portfolio; en móvil se superpone
+           arriba a la derecha (el hueco que deja la itálica corta) -->
       <a
         href={r.portfolio}
-        class="reveal fadeIn portfolio-stamp group relative hidden sm:block w-28 h-28 lg:w-36 lg:h-36 shrink-0"
+        class="reveal fadeIn portfolio-stamp group absolute -top-6 right-0 w-20 h-20 sm:relative sm:top-auto sm:right-auto sm:w-28 sm:h-28 lg:w-36 lg:h-36 shrink-0"
         style="--reveal-delay:0.3s"
         aria-label={t('portfolio.cta')}
       >
