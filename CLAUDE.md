@@ -29,6 +29,11 @@ Web profesional de agencia de tres personas: José Miguel Díaz (desarrollo/téc
 - Toda cadena visible pasa por `t('clave')` de `useTranslations(lang)` — nunca texto hardcodeado, y siempre añadir la clave en ES y EN en `ui.ts`
 - Enlaces internos vía `routes[lang]`, nunca rutas a mano
 
+## SEO
+
+- Todo cambio de SEO técnico (meta, hreflang, schema, robots, rendimiento) se documenta en `SEO.md` con fecha — es el registro vivo del proyecto
+- Verificación móvil: `node scripts/mobile-check.mjs` con el dev server activo
+
 ## Skills del proyecto (`.claude/skills/`)
 
 - `frontend-design` / `ui-ux-pro-max` — para construir o elevar UI
