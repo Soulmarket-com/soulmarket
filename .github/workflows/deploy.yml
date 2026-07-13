@@ -46,7 +46,7 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -p 2222 -H "$SSH_HOST" >> ~/.ssh/known_hosts
-          rsync -avz --delete -e "ssh -p 2222 -i ~/.ssh/id_ed25519" dist/ "$SSH_USER@$SSH_HOST:$SSH_TARGET_PATH/"
+          rsync -rlvz --delete --no-perms --no-owner --no-group -e "ssh -p 2222 -i ~/.ssh/id_ed25519" dist/ "$SSH_USER@$SSH_HOST:$SSH_TARGET_PATH/"
 
       - name: Notify on success
         if: success()
