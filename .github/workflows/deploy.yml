@@ -1,8 +1,8 @@
 name: Build & Deploy to VPS
 
-# Solo manual hasta que el VPS esté listo y los secrets SSH_* configurados;
-# si corriera en cada push fallaría. Reactivar el trigger `push` al lanzar.
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 concurrency:
@@ -33,6 +33,8 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build site
+        env:
+          ASTRO_SITE: https://soulmarket.es
         run: pnpm build
 
       - name: Deploy to VPS via rsync
@@ -43,10 +45,10 @@ jobs:
           SSH_TARGET_PATH: ${{ secrets.SSH_TARGET_PATH }}
         run: |
           mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts
-          rsync -avz --delete dist/ "$SSH_USER@$SSH_HOST:$SSH_TARGET_PATH/"
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -p 2222 -H "$SSH_HOST" >> ~/.ssh/known_hosts
+          rsync -avz --delete -e "ssh -p 2222 -i ~/.ssh/id_ed25519" dist/ "$SSH_USER@$SSH_HOST:$SSH_TARGET_PATH/"
 
       - name: Notify on success
         if: success()
