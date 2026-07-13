@@ -20,13 +20,15 @@ if (!$body) {
     exit;
 }
 
-$name    = trim((string)($body['name']    ?? ''));
-$email   = trim((string)($body['email']   ?? ''));
-$message = trim((string)($body['message'] ?? ''));
-$source  = trim((string)($body['source']  ?? ''));
-$lang    = in_array($body['lang'] ?? '', ['es', 'en']) ? $body['lang'] : 'es';
+$name       = trim((string)($body['name']       ?? ''));
+$email      = trim((string)($body['email']      ?? ''));
+$phone      = trim((string)($body['phone']      ?? ''));
+$message    = trim((string)($body['message']    ?? ''));
+$source     = trim((string)($body['source']     ?? ''));
+$newsletter = (bool)($body['newsletter'] ?? false);
+$lang       = in_array($body['lang'] ?? '', ['es', 'en']) ? $body['lang'] : 'es';
 
-if (!$name || !filter_var($email, FILTER_VALIDATE_EMAIL) || !$message) {
+if (!$name || !filter_var($email, FILTER_VALIDATE_EMAIL) || !$phone || !$message) {
     http_response_code(422);
     echo json_encode(['error' => 'missing_fields']);
     exit;
@@ -70,13 +72,17 @@ if (!$uid) {
 $lead_name = 'Web soulmarket.es — ' . $name;
 if ($source) $lead_name .= ' [' . $source . ']';
 
+$description = $message;
+if ($newsletter) $description .= "\n\n[Newsletter: sí]";
+
 $lead_id = odoo_rpc(
     $config['url'], 'object', 'execute_kw',
     [$config['db'], $uid, $config['password'], 'crm.lead', 'create', [[
         'name'         => $lead_name,
         'partner_name' => $name,
         'email_from'   => $email,
-        'description'  => $message,
+        'phone'        => $phone,
+        'description'  => $description,
         'company_id'   => $config['company_id'],
     ]]]
 );
