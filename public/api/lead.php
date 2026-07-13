@@ -28,7 +28,10 @@ $source     = trim((string)($body['source']     ?? ''));
 $newsletter = (bool)($body['newsletter'] ?? false);
 $lang       = in_array($body['lang'] ?? '', ['es', 'en']) ? $body['lang'] : 'es';
 
-if (!$name || !filter_var($email, FILTER_VALIDATE_EMAIL) || !$phone || !$message) {
+$phone_digits = preg_replace('/[\s\-\.\(\)]/', '', $phone);
+$phone_valid  = (bool) preg_match('/^\+?\d{7,15}$/', $phone_digits);
+
+if (!$name || !filter_var($email, FILTER_VALIDATE_EMAIL) || !$phone_valid || !$message) {
     http_response_code(422);
     echo json_encode(['error' => 'missing_fields']);
     exit;

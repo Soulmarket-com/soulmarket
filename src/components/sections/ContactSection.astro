@@ -50,6 +50,7 @@ const r = routes[lang];
         data-sending={t('contact.sending')}
         data-success={t('contact.success')}
         data-error={t('contact.error')}
+        data-phone-error={t('contact.phone.error')}
       >
         <div class="grid sm:grid-cols-2 gap-x-8">
           <div class="field">
@@ -142,15 +143,22 @@ const r = routes[lang];
 </style>
 
 <script>
-  // Proxy en el VPS que reenvía al Lead Capture del CRM (ver tarea #1).
   const LEAD_ENDPOINT = '/api/lead.php';
+
+  function isValidPhone(value: string): boolean {
+    const digits = value.replace(/[\s\-\.\(\)]/g, '');
+    return /^\+?\d{7,15}$/.test(digits);
+  }
 
   const form = document.getElementById('contact-form') as HTMLFormElement | null;
 
   if (form) {
     const feedback = form.querySelector<HTMLElement>('.form-feedback')!;
     const btn = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    const phoneInput = form.querySelector<HTMLInputElement>('#phone')!;
     const idleLabel = btn.textContent;
+
+    phoneInput.addEventListener('input', () => phoneInput.setCustomValidity(''));
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -161,6 +169,13 @@ const r = routes[lang];
         form.reset();
         return;
       }
+
+      if (!isValidPhone(String(data.get('phone') ?? ''))) {
+        phoneInput.setCustomValidity(form.dataset.phoneError ?? 'Teléfono no válido');
+        phoneInput.reportValidity();
+        return;
+      }
+      phoneInput.setCustomValidity('');
 
       btn.disabled = true;
       btn.textContent = form.dataset.sending ?? '…';
