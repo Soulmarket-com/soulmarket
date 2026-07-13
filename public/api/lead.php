@@ -77,6 +77,7 @@ $lead_id = odoo_rpc(
         'partner_name' => $name,
         'email_from'   => $email,
         'description'  => $message,
+        'company_id'   => $config['company_id'],
     ]]]
 );
 
