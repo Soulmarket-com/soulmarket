@@ -1,8 +1,9 @@
 <?php
 declare(strict_types=1);
 
-// Credenciales en fichero fuera del webroot (no en el repo)
-$config = require dirname(__DIR__, 2) . '/odoo.config.php';
+// Credenciales en directorio private de HestiaCP (no accesible por web)
+$private = str_replace('/public_html', '/private', dirname(__DIR__));
+$config = require $private . '/odoo.config.php';
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: https://soulmarket.es');
