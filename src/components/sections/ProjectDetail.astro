@@ -1,13 +1,13 @@
 ---
 import { useTranslations, routes, withBase } from '../../i18n/utils';
 import AnimatedButton from '../ui/AnimatedButton.astro';
-import type { CollectionEntry } from 'astro:content';
+import type { PortfolioEntry } from '../../lib/strapi';
 
 interface Props {
   lang: 'es' | 'en';
-  item: CollectionEntry<'portfolio'>;
-  prev: CollectionEntry<'portfolio'> | null;
-  next: CollectionEntry<'portfolio'> | null;
+  item: PortfolioEntry;
+  prev: PortfolioEntry | null;
+  next: PortfolioEntry | null;
 }
 
 const { lang, item, prev, next } = Astro.props;

@@ -2,12 +2,11 @@
 import Base from '../../layouts/Base.astro';
 import PortfolioIndex from '../../components/sections/PortfolioIndex.astro';
 import CtaBanner from '../../components/sections/CtaBanner.astro';
-import { getCollection } from 'astro:content';
+import { getPortfolioItems } from '../../lib/strapi';
 
 const lang = 'es';
 
-const allItems = await getCollection('portfolio', ({ data }) => data.lang === lang);
-const items = allItems.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const items = await getPortfolioItems();
 ---
 
 <Base

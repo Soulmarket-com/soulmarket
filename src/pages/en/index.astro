@@ -8,21 +8,14 @@ import FeaturedPortfolio from '../../components/sections/FeaturedPortfolio.astro
 import Team from '../../components/sections/Team.astro';
 import LatestBlog from '../../components/sections/LatestBlog.astro';
 import CtaBanner from '../../components/sections/CtaBanner.astro';
-import { getCollection } from 'astro:content';
+import { getBlogPosts, getPortfolioItems } from '../../lib/strapi';
 
 const lang = 'en';
 
-const portfolioItems = await getCollection('portfolio', ({ data }) =>
-  data.lang === lang && data.featured
-);
+// El contenido de Strapi todavía no tiene i18n (solo ES) — ver soulmarket/CLAUDE.md.
+const portfolioItems = (await getPortfolioItems()).filter((item) => item.data.featured);
 
-const posts = await getCollection('blog', ({ data }) =>
-  data.lang === lang && !data.draft
-);
-
-const latestPosts = posts
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 3);
+const latestPosts = (await getBlogPosts()).slice(0, 3);
 ---
 
 <Base

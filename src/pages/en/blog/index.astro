@@ -2,14 +2,15 @@
 import Base from '../../../layouts/Base.astro';
 import BlogRows from '../../../components/sections/BlogRows.astro';
 import CtaBanner from '../../../components/sections/CtaBanner.astro';
-import { getCollection } from 'astro:content';
+import { getBlogPosts } from '../../../lib/strapi';
 import { useTranslations } from '../../../i18n/utils';
 
 const lang = 'en';
 const t = useTranslations(lang);
 
-const allPosts = await getCollection('blog', ({ data }) => data.lang === lang && !data.draft);
-const posts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+// El contenido de Strapi todavía no tiene i18n (solo ES) — se muestra el
+// mismo contenido bajo /en/ hasta que se traduzca. Ver soulmarket/CLAUDE.md.
+const posts = await getBlogPosts();
 ---
 
 <Base

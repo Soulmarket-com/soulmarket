@@ -1,12 +1,13 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { marked } from 'marked';
+import { getPortfolioItems } from '../../../lib/strapi';
 import Base from '../../../layouts/Base.astro';
 import ProjectDetail from '../../../components/sections/ProjectDetail.astro';
 import CtaBanner from '../../../components/sections/CtaBanner.astro';
 
 export async function getStaticPaths() {
-  const items = (await getCollection('portfolio', ({ data }) => data.lang === 'en'))
-    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  // El contenido de Strapi todavía no tiene i18n (solo ES) — ver soulmarket/CLAUDE.md.
+  const items = await getPortfolioItems();
   return items.map((item, i) => ({
     params: { slug: item.id },
     props: { item, prev: items[i - 1] ?? null, next: items[i + 1] ?? null },
@@ -14,7 +15,7 @@ export async function getStaticPaths() {
 }
 
 const { item, prev, next } = Astro.props;
-const { Content } = await render(item);
+const contentHtml = marked.parse(item.content);
 const lang = 'en';
 ---
 
@@ -25,7 +26,7 @@ const lang = 'en';
   lang={lang}
 >
   <ProjectDetail lang={lang} item={item} prev={prev} next={next}>
-    <Content />
+    <Fragment set:html={contentHtml} />
   </ProjectDetail>
   <CtaBanner lang={lang} />
 </Base>

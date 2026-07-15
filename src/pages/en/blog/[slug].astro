@@ -1,9 +1,11 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { marked } from 'marked';
+import { getBlogPosts } from '../../../lib/strapi';
 import BlogPost from '../../../layouts/BlogPost.astro';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog', ({ data }) => data.lang === 'en' && !data.draft);
+  // El contenido de Strapi todavía no tiene i18n (solo ES) — ver soulmarket/CLAUDE.md.
+  const posts = await getBlogPosts();
   return posts.map(post => ({
     params: { slug: post.id },
     props: { post },
@@ -11,7 +13,7 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
+const contentHtml = marked.parse(post.content);
 ---
 
 <BlogPost
@@ -24,5 +26,5 @@ const { Content } = await render(post);
   tags={post.data.tags}
   lang="en"
 >
-  <Content />
+  <Fragment set:html={contentHtml} />
 </BlogPost>

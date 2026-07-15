@@ -1,11 +1,11 @@
 ---
 import { useTranslations, routes } from '../../i18n/utils';
 import BlogRows from './BlogRows.astro';
-import type { CollectionEntry } from 'astro:content';
+import type { BlogEntry } from '../../lib/strapi';
 
 interface Props {
   lang: 'es' | 'en';
-  posts: CollectionEntry<'blog'>[];
+  posts: BlogEntry[];
 }
 
 const { lang, posts } = Astro.props;
