@@ -34,6 +34,12 @@ Web profesional de agencia de tres personas: José Miguel Díaz (desarrollo/téc
   - Fallback de imagen: los proyectos de portfolio sin `coverImage` en Strapi usan `/portfolio/mock-01.svg` (los content-types no tienen campo `tags`, así que las chips de tags quedan vacías por ahora).
   - `STRAPI_URL` y `STRAPI_API_TOKEN` inyectados en el workflow (`deploy.yml`, step "Build site") desde secrets del repo.
   - `src/content/blog/`, `src/content/portfolio/` (MDX) y `src/content.config.ts` siguen en el repo sin usarse (nadie las importa) — se pueden borrar cuando se confirme que no hace falta consultarlas como referencia.
+- **Deploy automático al publicar en Strapi (2026-07-15):**
+  - Webhook en Strapi (tabla `strapi_webhooks`, id 1, "Deploy soulmarket.es") dispara en `entry.publish` / `entry.unpublish` → POST a `https://soulmarket.es/api/strapi-deploy-hook.php`.
+  - `public/api/strapi-deploy-hook.php` (mismo patrón que `lead.php`: config fuera del webroot) valida un secreto compartido (header `X-Webhook-Secret`) y llama a la API de GitHub (`.../actions/workflows/deploy.yml/dispatches`) para relanzar el `workflow_dispatch` ya existente en `deploy.yml` — no hizo falta tocar el YAML.
+  - Config privada: `/home/nutrousercp/web/soulmarket.es/private/strapi-deploy-hook.config.php` (fuera del repo) con `webhook_secret` y `github_token` (fine-grained PAT, permiso "Actions: Read and write" solo sobre este repo).
+  - **Caveat:** el webhook de Strapi no filtra por content-type — si en el futuro se añaden content-types al blog de Nitro (nutroteca) en esta misma instancia compartida, publicar ahí también disparará un rebuild de soulmarket (inofensivo pero innecesario).
+  - Probado de extremo a extremo el 2026-07-15: webhook → PHP → GitHub API → nuevo run `workflow_dispatch` → deploy con éxito.
 - **Pendiente:** el contenido de Strapi no tiene i18n — las páginas `/en/blog` y `/en/portfolio` muestran el mismo contenido en español hasta que se añadan traducciones (ver comentarios `// El contenido de Strapi todavía no tiene i18n` en esas páginas).
 
 ## Estructura
