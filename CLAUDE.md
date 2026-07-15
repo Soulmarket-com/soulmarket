@@ -40,7 +40,12 @@ Web profesional de agencia de tres personas: José Miguel Díaz (desarrollo/téc
   - Config privada: `/home/nutrousercp/web/soulmarket.es/private/strapi-deploy-hook.config.php` (fuera del repo) con `webhook_secret` y `github_token` (fine-grained PAT, permiso "Actions: Read and write" solo sobre este repo).
   - **Caveat:** el webhook de Strapi no filtra por content-type — si en el futuro se añaden content-types al blog de Nitro (nutroteca) en esta misma instancia compartida, publicar ahí también disparará un rebuild de soulmarket (inofensivo pero innecesario).
   - Probado de extremo a extremo el 2026-07-15: webhook → PHP → GitHub API → nuevo run `workflow_dispatch` → deploy con éxito.
-- **Pendiente:** el contenido de Strapi no tiene i18n — las páginas `/en/blog` y `/en/portfolio` muestran el mismo contenido en español hasta que se añadan traducciones (ver comentarios `// El contenido de Strapi todavía no tiene i18n` en esas páginas).
+- **Generador automático de borradores (2026-07-15):**
+  - Rutina programada (Claude cloud agent, `trig_01Qug2Fm9t3HNHbmjuJ7akYt` — gestionable en https://claude.ai/code/routines) corre `0 6,14 * * *` UTC (08:00 y 16:00 Europe/Madrid en verano) — de momento 2x/día para nutrir el blog, bajar la frecuencia ahí cuando haya suficiente contenido.
+  - Cada ejecución: clona el repo (solo lectura, para leer `CLAUDE.md`/`SEO.md`/el artículo de referencia como guía de voz), consulta los artículos existentes en Strapi para no repetir tema, investiga con WebSearch si hace falta un dato real (nunca inventa cifras/casos/testimonios), escribe un artículo y lo sube a Strapi **sin publicar** (sin `publishedAt` → queda en borrador).
+  - Token dedicado `content-bot` en Strapi (tipo `custom`, permisos `find`/`findOne`/`create` **solo** sobre `soulmarket-article` — no puede publicar, tocar portfolio, ni nada de admin). Token embebido en el prompt de la rutina, no en el repo.
+  - Revisión humana obligatoria: Marcela revisa/edita en `https://blog.soulmarket.es/admin` y publica cuando esté conforme — eso ya dispara el deploy automático de arriba.
+  - **Tarea recurrente del equipo:** revisar los borradores nuevos en Content Manager y publicar solo los aprobados. Para bajar la cadencia (p. ej. a 1x/semana) una vez el blog tenga contenido suficiente, actualizar el `cron_expression` de la rutina — no requiere tocar código.
 
 ## Estructura
 
